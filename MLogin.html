@@ -1,0 +1,40 @@
+<html>
+<header>
+  <link rel="stylesheet" href="style.css">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 372</title>
+  
+</header>
+
+
+
+<body>
+  <div class ="wrapper">
+  <h1>FletNix</h1>
+  <form class ="form" id="LogIn">
+    <div class="form__message form__message--error"> </div>
+    <div class = "userID">
+      <label for "username">Username:</label>
+      <input type="text" id="username" name="username" class="input-field" required><br>
+    </div>
+
+    <div class="form__message form__message--error"> </div>
+    <div class ="Pass">
+      <label for "password">Password:</label>
+      <input type="password" id="password" name="password" class="input-field password-input" required><br>
+    </div>
+
+
+    <div class = "login">
+      <button type="submit" class="btn" id="loginButton">Log In</button>
+    </div>
+    <div class = "signup">
+      <button type="submit" class="btn" onclick="Login.js" value="Submit" id="signupButton">Sign Up </button>
+    </div>
+  </form>
+</div>
+    <script src="Login.js"></script>
+    </body>
+    </html>
