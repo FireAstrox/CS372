@@ -75,7 +75,7 @@ async function grabFailedAttempts(username, filepath) {
     try {
         const data = await fs.readFile(filepath, 'utf8');
         const jSONuserData = JSON.parse(data);
-        const user = jSONuserData.user.find(user => user.username === username);
+        const user = jSONuserData.users.find(user => user.username === username);
         return user ? user.failedAttempts : null;
     }
     catch (error) {
@@ -94,7 +94,7 @@ async function checkPasswordAttempts (username, password, filePath) {
     try {
         let data = await fs.readFile(filePath, 'utf8');
         let jSONuserData = JSON.parse(data);
-        let user = jSONuserData.user.find(user => user.username === username);
+        let user = jSONuserData.users.find(user => user.username === username);
 
         if (user) {
             if (user.password === password) {
@@ -107,7 +107,7 @@ async function checkPasswordAttempts (username, password, filePath) {
                 user.failedAttempts++;
                 if (user.failedAttempts >= 5) {
                     // Delete user if failedAttempts reach 5
-                    jSONuserData.user = jSONuserData.user.filter(u => u.username !== username);
+                    jSONuserData.user = jSONuserData.users.filter(u => u.username !== username);
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
                     console.log(`User '${username}' deleted due to excessive failed attempts.`);
                 } else {
