@@ -87,10 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             //User not found send error
                             setFormMessage(logIn, 'error', "Username not found");
                         }
-                        else if (response.message.startsWith('Incorrect Password')) {
+                        else {//if (response.message.startsWith('Incorrect Password')) {
                             //After seeing incorrect password start showing remains failed attempts
+                            if(remainingAttempts <= 5){
+                                setFormMessage(logIn, 'error', 'User has been deleted due to too many attempts')
+                            }
+                            else{
                             const remainingAttempts = parseInt(response.message.split(':')[1]);
                             setFormMessage(logIn, 'error', `Incorrect Password. Remaining attempts: ${5 - remainingAttempts}`);
+                            }
                         }
                     }
                 });
