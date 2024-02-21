@@ -2,11 +2,13 @@
   "users": [
     {
       "username": "example_user",
-      "password": "Passw0rd**"
+      "password": "Passw0rd**",
+      "failedAttempts": 0
     },
     {
       "username": "person_",
-      "password": "Passw0rd!"
+      "password": "Passw0rd!",
+      "failedAttempts": 0
     }
   ]
 }

@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         var special = false;
         var number = false;
         var specials = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/;
+        var xhr = new XMLHttpRequest();
 
         if(password.length >= 8){
             for(let i = 0; i < password.length; i++){
