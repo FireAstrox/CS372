@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     special = true;
                 }
             }
+        }
 
         if (!(username.length >= 5 && username.split("_").length === 2)) {
             setFormMessage(logIn, "error", "Invalid username. Usernames must consist of at least 4 letters, and end in an underscore.");
@@ -110,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log(both);
 
-    }});
+    });
 
     signUp.addEventListener("submit_signup", async e => {
         e.preventDefault();
