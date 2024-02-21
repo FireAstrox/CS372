@@ -13,22 +13,24 @@ function setFormMessage(formElement, type, message) {
 document.addEventListener("DOMContentLoaded", () => {
     const logIn = document.querySelector("#LogIn");
     const both = document.querySelectorAll('.btn');
+    let clickedButton = "";
     let LogIN_test = false;
     let SignUp_test = false;
-    let clickedButton = "";
+    
 
     both.forEach(bt => {
         bt.addEventListener('mousedown', (a) => {
             clickedButton = a.target.innerHTML;
             console.log(clickedButton);
-            if(clickedButton == "loginButton") {
+            if(clickedButton == "Log In") {
                 console.log("Logging in");
                 LogIN_test = true;
                 SignUp_test = false;
             } else { 
                 console.log("Signing up");
-                SignUp_test = true;
                 LogIN_test = false;
+                SignUp_test = true;
+                
             }
         });
     });
