@@ -54,7 +54,7 @@ async function createUser(username, password, filePath) {
         };
 
         // Add the new user to the JSON data
-        jSONuserData.user.push(newUser);
+        jSONuserData.users.push(newUser);
 
         // Write the updated JSON data to the file
         await fs.writeFile(filePath, JSON.stringify(jsonData, null, 4), 'utf8');
