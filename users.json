@@ -1,8 +1,9 @@
 {
-    "users": [
-        {
-            "username": "example_user",
-            "password": "hashed_password_here"
-        }
-    ]
+  "users": [
+    {
+      "username": "example_user",
+      "password": "hashed_password_here"
+    }
+  ],
+  "rylan_": "Passw0rd*"
 }

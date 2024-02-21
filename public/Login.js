@@ -7,6 +7,23 @@ function setFormMessage(formElement, type, message) {
     messageElement.classList.add(`form__message--${type}`);
 }
 
+
+async function sendUserData(username, password) {
+    try {
+        const response = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+        return response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const logIn = document.querySelector("#LogIn");
     const both = document.querySelectorAll('.btn');
@@ -23,9 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-    logIn.addEventListener("submit", e => {
+    logIn.addEventListener("submit", async e => {
         e.preventDefault();
-        var userID = document.getElementById("username").value;
+        const userID = document.getElementById("username").value;
+        const pass = document.getElementById("password").value;
+
+
+        var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
         var lower = false;
         var upper = false;
@@ -49,15 +70,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-        if (!(userID.length >= 5 && userID.split("_").length === 2)) {
+        if (!(username.length >= 5 && username.split("_").length === 2)) {
             setFormMessage(logIn, "error", "Invalid username. Usernames must consist of at least 4 letters, and end in an underscore.");
         } else if (!(lower && upper && number && special)){
             setFormMessage(logIn, "error", "Invalid password.");
         } else {
+
+            const response = await sendUserData(userID, pass);
+            if (response.error){
+                setFormMessage(logIn, "error", response.message);
+            }
+            else{
             setFormMessage(logIn, "success", "Valid Username and password");
+            }
         }
         console.log(both);
     }});
+
 });
 
 /* const fs = require('fs');
