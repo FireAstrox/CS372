@@ -101,19 +101,19 @@ async function checkPasswordAttempts (username, password, filePath) {
                 // Reset failed attempts upon successful login
                 user.failedAttempts = 0;
                 await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
-                console.log(`Failed attempts for user '${username}' reset successfully.`);
+                console.log(`Failed attempts for user '${username}' reset successfully to 0.`);
                 return true;
             } else {
                 user.failedAttempts++;
                 if (user.failedAttempts >= 5) {
                     // Delete user if failedAttempts reach 5
-                    jSONuserData.user = jSONuserData.users.filter(u => u.username !== username);
+                    jSONuserData.users = jSONuserData.users.filter(u => u.username !== username);
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
-                    console.log(`User '${username}' deleted due to excessive failed attempts.`);
+                    console.log(`User '${username}' deleted, sucks to suck`);
                 } else {
                     // Update failed attempts
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
-                    console.log(`Failed attempts for user '${username}' incremented successfully.`);
+                    console.log(`Failed attempts for user '${username}'; Attempts remaining: ${5 - user.failedAttempts}.`);
                 }
                 return false;
             }
@@ -162,7 +162,7 @@ app.post('/login', async (req, res) => {
         const userFound = await findUserID(username, usersFile);
         if (userFound) {
             const passwordCorrect = await checkPasswordAttempts(username, password, usersFile);
-            console.log ("user found");
+            // log used for trouble shooting ---- console.log ("user found");
             if (passwordCorrect) {
                 res.json({ success: true, message: 'Login successful' });
             } else {
@@ -191,7 +191,7 @@ app.post('/signup', async (req, res) => {
     try {
         const userFound = await findUserID(username, usersFile);
         if (userFound) {
-            res.json({ success: false, message: 'Username Taken' });
+            res.json({ success: false, message: 'User Already Exists' });
         } else {
             createUser(username, password, usersFile)
                 .then(success => {
@@ -200,7 +200,7 @@ app.post('/signup', async (req, res) => {
                         res.json({ success: true, message: 'User Created' });
                     } else {
                         // console.log("Username Taken");
-                        res.json({ success: false, message: 'Username Taken' });
+                        res.json({ success: false, message: 'User Already Exists' });
                     }
                 })
                 .catch(error => {
