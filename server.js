@@ -9,7 +9,7 @@ const usersFile = 'users.json';
 app.post('/signup', (req, res) => {
     const { username, password } = req.body;
     
-    
+    // make empty array of users 
     let usersData = { users: [] };
 
     // Read existing users
@@ -28,6 +28,37 @@ app.post('/signup', (req, res) => {
     res.json({ success: true, message: "User created successfully" });
 });
 
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Read existing users
+    let usersData = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
+
+    // Check if user exists
+    let user = usersData.users.find(u => u.username === username);
+
+    if (user) {
+        if (user.failedAttempts >= 5) {
+            // Delete user
+            usersData.users = usersData.users.filter(u => u.username !== username);
+            fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
+            res.json({ success: false, message: "Account locked and deleted" });
+        } else if (user.password === password) {
+            // Reset failed attempts on successful login
+            user.failedAttempts = 0;
+            fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
+            res.json({ success: true, message: "Login successful" });
+        } else {
+            // Increment failed attempts
+            user.failedAttempts++;
+            fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
+            res.json({ success: false, message: "Incorrect password", attemptsLeft: 5 - user.failedAttempts });
+        }
+    } else {
+        res.json({ success: false, message: "User not found" });
+    }
+});
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });

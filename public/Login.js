@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setFormMessage(logIn, "error", "Invalid password.");
         } else {
 
-            const response = await sendUserData(userID, pass);
+            const response = await sendLoginData(userID, pass);
             if (response.error){
                 setFormMessage(logIn, "error", response.message);
             }
@@ -85,29 +85,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         console.log(both);
+
+        async function sendLoginData(username, password) {
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                return response.json();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
     }});
 
 });
 
-/* const fs = require('fs');
-      const form = document.getElementById('LogIn');
-      form.addEventListener('signupButton', (e) => {
-  e.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-
-  const data = {
-    username: username,
-    password: password
-  };
-
-  const jsonData = JSON.stringify(data, null, 2);
-
-  fs.appendFile('Login.json', jsonData, (err) => {
-    if (err) {
-      console.log('Error writing file:', err);
-    } else {
-      console.log('File has been created successfully!');
-    }
-  });
-}) */
