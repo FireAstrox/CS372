@@ -10,7 +10,8 @@
     },
     {
       "username": "rylan_",
-      "password": "Passw0rd*"
+      "password": "Passw0rd*",
+      "failedAttempts": 0
     }
   ]
 }
