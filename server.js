@@ -41,7 +41,7 @@ app.post('/login', (req, res) => {
     if (user) {
         if (user.failedAttempts >= 5) {
             // Delete user
-            usersData.users = usersData.users.filter(u => u.password !== password);
+            usersData.users = usersData.users.filter(u => u.username !== username);
             fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
             res.json({ success: false, message: "Account locked and deleted" });
         } else if (user.password === password) {
@@ -59,7 +59,7 @@ app.post('/login', (req, res) => {
     } else {
         res.json({ success: false, message: "User not found" });
     }
-});
+}); 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });

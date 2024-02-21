@@ -23,11 +23,26 @@ async function sendUserData(username, password) {
     }
 }
 
+ async function sendLoginData(username, password) {
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            return response.json();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
 document.addEventListener("DOMContentLoaded", () => {
     const logIn = document.querySelector("#LogIn");
     const both = document.querySelectorAll('.btn');
     const loginAttemptMessage = document.getElementById("loginAttemptMessage");
+    
     let clickedButton = "";
 
     both.forEach(bt => {
@@ -86,27 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             else{
             setFormMessage(logIn, "success", "Valid Username and password");
-            window.location.href = '/mainpage'; //redirect to success page 
+            //window.location.href = '/mainpage'; //redirect to success page 
             }
         }
         console.log(both);
 
     }});
 
-    async function sendLoginData(username, password) {
-        try {
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-            return response.json();
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+   
 
 });
 

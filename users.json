@@ -7,11 +7,6 @@
     {
       "username": "person_",
       "password": "Passw0rd!"
-    },
-    {
-      "username": "rylan_",
-      "password": "Passw0rd*",
-      "failedAttempts": 0
     }
   ]
 }
