@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const logIn = document.querySelector("#LogIn");
     const both = document.querySelectorAll('.btn');
     let LogIN_test = false;
-    let SignUp_test = true;
+    let SignUp_test = false;
     let clickedButton = "";
 
     both.forEach(bt => {
@@ -24,9 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if(clickedButton == "loginButton") {
                 console.log("Logging in");
                 LogIN_test = true;
+                SignUp_test = false;
             } else { 
                 console.log("Signing up");
                 SignUp_test = true;
+                LogIN_test = false;
             }
         });
     });
