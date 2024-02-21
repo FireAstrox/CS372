@@ -138,7 +138,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/mainpage', (req, res) => {
-    res.sendFile(path.join(__dirname, "/mainpage.html"));
+    res.json("Successful Login; Have fun");
 });
 
 app.get('*', (req, res) => {
