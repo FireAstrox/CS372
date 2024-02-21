@@ -2,8 +2,15 @@
   "users": [
     {
       "username": "example_user",
-      "password": "hashed_password_here"
+      "password": "Passw0rd**"
+    },
+    {
+      "username": "person_",
+      "password": "Passw0rd!"
+    },
+    {
+      "username": "rylan_",
+      "password": "Passw0rd*"
     }
-  ],
-  "rylan_": "Passw0rd*"
+  ]
 }

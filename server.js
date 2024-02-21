@@ -9,20 +9,22 @@ const usersFile = 'users.json';
 app.post('/signup', (req, res) => {
     const { username, password } = req.body;
     
+    
+    let usersData = { users: [] };
+
     // Read existing users
-    let users = {};
     if (fs.existsSync(usersFile)) {
-        users = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
+        usersData = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
     }
 
     // Check if user exists
-    if (users[username]) {
+    if (usersData.users.some(user => user.username === username)) {
         return res.json({ success: false, message: "Username already exists" });
     }
 
     // Add new user
-    users[username] = password; // Note: Password should be hashed in a real application
-    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+    usersData.users.push({ username, password }); // Note: Password should be hashed in a real application
+    fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
     res.json({ success: true, message: "User created successfully" });
 });
 
