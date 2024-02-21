@@ -109,7 +109,8 @@ async function checkPasswordAttempts (username, password, filePath) {
                     // Delete user if failedAttempts reach 5
                     jSONuserData.users = jSONuserData.users.filter(u => u.username !== username);
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
-                    console.log(`User '${username}' deleted, sucks to suck`);
+                    console.log(`Failed attempt for user '${username}' Attempts remaing has reached 0`);
+                    console.log(`User '${username}' has now been deleted, sucks to suck`);
                 } else {
                     // Update failed attempts
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
@@ -137,7 +138,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/mainpage', (req, res) => {
-    res.json("Successful Login Credentials");
+    res.sendFile(path.join(__dirname, "/mainpage.html"));
 });
 
 app.get('*', (req, res) => {

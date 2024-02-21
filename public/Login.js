@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                         else {//if (response.message.startsWith('Incorrect Password')) {
                             //After seeing incorrect password start showing remains failed attempts
-                            if(remainingAttempts <= 5){
+                            if(5 - remainingAttempts <= 0){
                                 setFormMessage(logIn, 'error', 'User has been deleted due to too many attempts')
                             }
                             else{
