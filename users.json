@@ -1,3 +1,12 @@
 {
-  
+  "users": [
+    {
+      "username": "example_user",
+      "password": "Passw0rd**"
+    },
+    {
+      "username": "person_",
+      "password": "Passw0rd!"
+    }
+  ]
 }

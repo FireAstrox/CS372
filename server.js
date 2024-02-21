@@ -11,6 +11,24 @@ const usersFile = 'users.json';
 
 /*********************************************************
 ----------------------------------------------------------
+----------------Find User in JSON File--------------------
+----------------------------------------------------------
+*********************************************************/
+async function findUserID(username, filePath) {
+    try {
+        const data = await fs.readFile(filePath, 'utf8');
+        const jSONuserData = JSON.parse(data);
+        const user = jSONuserData.user.find(user => user.username === username);
+        return !!user;
+    } 
+    catch (error) {
+        console.error('Error reading the JSON file:', error);
+        return false;
+    }
+}
+
+/*********************************************************
+----------------------------------------------------------
 --------------------Create New User-----------------------
 ----------------------------------------------------------
 *********************************************************/
@@ -21,7 +39,7 @@ async function createUser(username, password, filePath) {
         let jSONuserData = JSON.parse(data);
 
         // Check if the username already exists
-        const userExists = jSONuserData.user.some(userID => userID.username === username);
+        const userExists = jSONuserData.user.some(user => user.username === username);
 
         if (userExists) {
             console.log(`User '${username}' already exists.`);
@@ -36,7 +54,7 @@ async function createUser(username, password, filePath) {
         };
 
         // Add the new user to the JSON data
-        jsonData.user.push(newUser);
+        jSONuserData.user.push(newUser);
 
         // Write the updated JSON data to the file
         await fs.writeFile(filePath, JSON.stringify(jsonData, null, 4), 'utf8');
@@ -50,24 +68,6 @@ async function createUser(username, password, filePath) {
 
 /*********************************************************
 ----------------------------------------------------------
-----------------Find User in JSON File--------------------
-----------------------------------------------------------
-*********************************************************/
-async function findUserID(username, filePath) {
-    try {
-        const data = await fs.readFile(filePath, 'utf8');
-        const jSONuserData = JSON.parse(data);
-        const userID = jSONuserData.userID.find(userID => userID.username === username);
-        return !!userID;
-    } 
-    catch (error) {
-        console.error('Error reading the JSON file:', error);
-        return false;
-    }
-}
-
-/*********************************************************
-----------------------------------------------------------
 ----------------Get Failed Number of Attempts-------------
 ----------------------------------------------------------
 *********************************************************/
@@ -75,8 +75,8 @@ async function grabFailedAttempts(username, filepath) {
     try {
         const data = await fs.readFile(filepath, 'utf8');
         const jSONuserData = JSON.parse(data);
-        const userID = jSONuserData.userID.find(userID => userID.username === username);
-        return userID ? userID.failedAttempts : null;
+        const user = jSONuserData.user.find(user => user.username === username);
+        return user ? user.failedAttempts : null;
     }
     catch (error) {
         console.error('Error reading the JSON File:', error);
@@ -94,20 +94,20 @@ async function checkPasswordAttempts (username, password, filePath) {
     try {
         let data = await fs.readFile(filePath, 'utf8');
         let jSONuserData = JSON.parse(data);
-        let userID = jSONuserData.userID.find(userID => userID.username === username);
+        let user = jSONuserData.user.find(user => user.username === username);
 
-        if (userID) {
-            if (userID.password === password) {
+        if (user) {
+            if (user.password === password) {
                 // Reset failed attempts upon successful login
-                userID.failedAttempts = 0;
+                user.failedAttempts = 0;
                 await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
                 console.log(`Failed attempts for user '${username}' reset successfully.`);
                 return true;
             } else {
-                userID.failedAttempts++;
-                if (userID.failedAttempts >= 5) {
+                user.failedAttempts++;
+                if (user.failedAttempts >= 5) {
                     // Delete user if failedAttempts reach 5
-                    jSONuserData.userID = jSONuserData.userID.filter(u => u.username !== username);
+                    jSONuserData.user = jSONuserData.user.filter(u => u.username !== username);
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
                     console.log(`User '${username}' deleted due to excessive failed attempts.`);
                 } else {
@@ -159,13 +159,13 @@ app.post('/login', async (req, res) => {
     const password = req.body.password;
 
     try {
-        const userFound = await findUserID(username, jsonFilePath);
+        const userFound = await findUserID(username, usersFile);
         if (userFound) {
-            const passwordCorrect = await checkPasswordAttempts(username, password, jsonFilePath);
+            const passwordCorrect = await checkPasswordAttempts(username, password, usersFile);
             if (passwordCorrect) {
                 res.json({ success: true, message: 'Login successful' });
             } else {
-                const failedAttempts = await grabFailedAttempts(username, jsonFilePath);
+                const failedAttempts = await grabFailedAttempts(username, usersFile);
                 res.json({ success: false, message: `Incorrect password: ${failedAttempts}` });
             }
         } else {
@@ -188,11 +188,11 @@ app.post('/signup', async (req, res) => {
     const password = req.body.password;
 
     try {
-        const userFound = await findUserID(username, jsonFilePath);
+        const userFound = await findUserID(username, usersFile);
         if (userFound) {
             res.json({ success: false, message: 'Username Taken' });
         } else {
-            createUser(username, password, jsonFilePath)
+            createUser(username, password, usersFile)
                 .then(success => {
                     if (success) {
                         console.log("User created successfully!");
@@ -212,73 +212,3 @@ app.post('/signup', async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
-
-
-
-
-
-
-
-
-
-//Disregard for now
-
-/*
-
-app.post('/signup', (req, res) => {
-    const { username, password } = req.body;
-    
-    // make empty array of users 
-    let usersData = { users: [] };
-
-    // Read existing users
-    if (fs.existsSync(usersFile)) {
-        usersData = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
-    }
-
-    // Check if user exists
-    if (usersData.users.some(user => user.username === username)) {
-        return res.json({ success: false, message: "Username already exists" });
-    }
-
-    // Add new user
-    usersData.users.push({ username, password }); // Note: Password should be hashed in a real application
-    fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
-    res.json({ success: true, message: "User created successfully" });
-});
-
-
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-    // Read existing users
-    let usersData = JSON.parse(fs.readFileSync(usersFile, 'utf8'));
-
-    // Check if user exists
-    let user = usersData.users.find(u => u.username === username);
-
-    if (user) {
-        if (user.failedAttempts >= 5) {
-            // Delete user
-            usersData.users = usersData.users.filter(u => u.username !== username);
-            fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
-            res.json({ success: false, message: "Account locked and deleted" });
-        } else if (user.password === password) {
-            // Reset failed attempts on successful login
-            user.failedAttempts = 0;
-            fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
-            res.json({ success: true, message: "Login successful" });
-        } else {
-            // Increment failed attempts
-            user.failedAttempts++;
-            fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
-            res.json({ success: false, message: "Incorrect password", attemptsLeft: 5 - user.failedAttempts });
-            console.log("Login failed for user:", username, "| Attempts left:", 5 - user.failedAttempts); // Log attempt information
-        }
-    } else {
-        res.json({ success: false, message: "User not found" });
-    }
-}); 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-}); */
