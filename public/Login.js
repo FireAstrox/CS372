@@ -150,9 +150,6 @@ async function sendUserData(username, password) {
         } catch (error) {
             console.error('Error:', error);
         }
-<<<<<<< HEAD
-    } */
-=======
     }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -278,4 +275,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
->>>>>>> 02f201a96972276341e5613d9ad15cc8149f1962
