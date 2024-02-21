@@ -18,7 +18,7 @@ async function findUserID(username, filePath) {
     try {
         const data = await fs.readFile(filePath, 'utf8');
         const jSONuserData = JSON.parse(data);
-        const user = jSONuserData.user.find(user => user.username === username);
+        const user = jSONuserData.users.find(user => user.username === username);
         return !!user;
     } 
     catch (error) {
@@ -39,7 +39,7 @@ async function createUser(username, password, filePath) {
         let jSONuserData = JSON.parse(data);
 
         // Check if the username already exists
-        const userExists = jSONuserData.user.some(user => user.username === username);
+        const userExists = jSONuserData.users.some(user => user.username === username);
 
         if (userExists) {
             console.log(`User '${username}' already exists.`);
@@ -57,7 +57,7 @@ async function createUser(username, password, filePath) {
         jSONuserData.users.push(newUser);
 
         // Write the updated JSON data to the file
-        await fs.writeFile(filePath, JSON.stringify(jsonData, null, 4), 'utf8');
+        await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
         console.log(`User '${username}' created successfully.`);
         return true;
     } catch (error) {

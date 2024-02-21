@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //Password passes requirement checks
                 setFormMessage(logIn, "success", "");
                 if (LogIN_test) {
-                    const userData = { username:username, password: password }
+                    const userData = { username:username, password:password }
                 
                 $.post('/login', userData, (response) => {
                     if (response.success) {
