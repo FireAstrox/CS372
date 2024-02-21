@@ -162,6 +162,7 @@ app.post('/login', async (req, res) => {
         const userFound = await findUserID(username, usersFile);
         if (userFound) {
             const passwordCorrect = await checkPasswordAttempts(username, password, usersFile);
+            console.log ("user found");
             if (passwordCorrect) {
                 res.json({ success: true, message: 'Login successful' });
             } else {

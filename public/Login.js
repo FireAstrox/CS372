@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bt.addEventListener('mousedown', (a) => {
             clickedButton = a.target.innerHTML;
             console.log(clickedButton);
-            if(clickedButton == "Log In") {
+            if(clickedButton == "Login") {
                 console.log("Logging in");
                 LogIN_test = true;
                 SignUp_test = false;
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             else {
                 //Password passes requirement checks
                 setFormMessage(logIn, "success", "");
-                if (LogIN_test) {
+                if (LogIN_test == true && SignUp_test == false) {
                     const userData = { username:username, password:password }
                 
                 $.post('/login', userData, (response) => {
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
                 }
-                else if (SignUp_test) {
+                else if (SignUp_test == true && LogIN_test == false) {
                     const userData = { username:username, password:password }
                     $.post('/signup', userData, (response) => {
                         if (response.success) {
