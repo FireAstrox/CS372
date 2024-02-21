@@ -27,6 +27,7 @@ async function sendUserData(username, password) {
 document.addEventListener("DOMContentLoaded", () => {
     const logIn = document.querySelector("#LogIn");
     const both = document.querySelectorAll('.btn');
+    const loginAttemptMessage = document.getElementById("loginAttemptMessage");
     let clickedButton = "";
 
     both.forEach(bt => {
@@ -79,29 +80,33 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await sendLoginData(userID, pass);
             if (response.error){
                 setFormMessage(logIn, "error", response.message);
+                if (response.attemptsLeft != null) {
+                    loginAttemptMessage.textContent = "Attempts remaining: " + response.attemptsLeft; // Update attempt message
+                }
             }
             else{
             setFormMessage(logIn, "success", "Valid Username and password");
+            window.location.href = '/mainpage'; //redirect to success page 
             }
         }
         console.log(both);
 
-        async function sendLoginData(username, password) {
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                return response.json();
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
     }});
+
+    async function sendLoginData(username, password) {
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            return response.json();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
 });
 

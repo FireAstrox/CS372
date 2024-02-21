@@ -41,7 +41,7 @@ app.post('/login', (req, res) => {
     if (user) {
         if (user.failedAttempts >= 5) {
             // Delete user
-            usersData.users = usersData.users.filter(u => u.username !== username);
+            usersData.users = usersData.users.filter(u => u.password !== password);
             fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
             res.json({ success: false, message: "Account locked and deleted" });
         } else if (user.password === password) {
@@ -54,6 +54,7 @@ app.post('/login', (req, res) => {
             user.failedAttempts++;
             fs.writeFileSync(usersFile, JSON.stringify(usersData, null, 2));
             res.json({ success: false, message: "Incorrect password", attemptsLeft: 5 - user.failedAttempts });
+            console.log("Login failed for user:", username, "| Attempts left:", 5 - user.failedAttempts); // Log attempt information
         }
     } else {
         res.json({ success: false, message: "User not found" });
