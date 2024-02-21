@@ -7,7 +7,7 @@ app.use(express.json());
 const usersFile = 'users.json';
 
 app.post('/signup', (req, res) => {
-    const { userID, password } = req.body;
+    const { username, password } = req.body;
     
     // Read existing users
     let users = {};
@@ -16,12 +16,12 @@ app.post('/signup', (req, res) => {
     }
 
     // Check if user exists
-    if (users[userID]) {
+    if (users[username]) {
         return res.json({ success: false, message: "Username already exists" });
     }
 
     // Add new user
-    users[userID] = password; // Note: Password should be hashed in a real application
+    users[username] = password; // Note: Password should be hashed in a real application
     fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
     res.json({ success: true, message: "User created successfully" });
 });
