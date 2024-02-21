@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const logIn = document.querySelector("#LogIn");
     const both = document.querySelectorAll('.btn');
     let LogIN_test = false;
-    let SignUp_test = true;
+    let SignUp_test = false;
     let clickedButton = "";
 
     both.forEach(bt => {
@@ -24,9 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if(clickedButton == "loginButton") {
                 console.log("Logging in");
                 LogIN_test = true;
+                SignUp_test = false;
             } else { 
                 console.log("Signing up");
                 SignUp_test = true;
+                LogIN_test = false;
             }
         });
     });
@@ -42,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         var special = false;
         var number = false;
         var specials = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/;
+        var xhr = new XMLHttpRequest();
 
         if(password.length >= 8){
             for(let i = 0; i < password.length; i++){
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //Password passes requirement checks
                 setFormMessage(logIn, "success", "");
                 if (LogIN_test) {
-                    const userData = { username:username, password: password }
+                    const userData = { username:username, password:password }
                 
                 $.post('/login', userData, (response) => {
                     if (response.success) {

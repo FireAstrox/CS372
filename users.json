@@ -1,3 +1,19 @@
 {
-  
+    "users": [
+        {
+            "username": "example_user",
+            "password": "Passw0rd**",
+            "failedAttempts": 0
+        },
+        {
+            "username": "person_",
+            "password": "Passw0rd!",
+            "failedAttempts": 0
+        },
+        {
+            "username": "rylan_",
+            "password": "Natc@4868*",
+            "failedAttempts": 0
+        }
+    ]
 }
