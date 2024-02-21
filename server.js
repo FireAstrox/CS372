@@ -4,7 +4,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 const router = express.Router();
-const bodyParser = require("body=parser");
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
 
 const usersFile = 'users.json';
