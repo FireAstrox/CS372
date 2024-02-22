@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         var number = false;
         var specials = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/;
         var xhr = new XMLHttpRequest();
+        var letters = true;
 
         if(password.length >= 8){
             for(let i = 0; i < password.length; i++){
@@ -66,7 +67,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (username.length >= 4 && username.split("_").length === 2) {
+            for(let i = 0; i <username.length - 1; i++){
+                if(!(username.charAt(i) == username.charAt(i).toLowerCase && username.charAt(i).toUpperCase == username.charAt(i).toLowerCase)){
+                    letters = false;
+                }
+            }
+            if(letters){
             setFormMessage(logIn, "success", "Valid Username and password");
+            }
 
             if (!(lower && upper && number && special)){
             setFormMessage(logIn, "error", "Invalid password, does not meet requirements.");    
