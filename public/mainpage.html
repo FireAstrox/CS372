@@ -54,5 +54,23 @@
     </div>
     </main>
 </wrapper>
+<script>
+    let timeout;
+    function resetTimer() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            window.location.href = '/index.html'; // Redirect to login page
+        }, 30000); // 30 seconds
+    }
+    
+    // Event listeners for various user actions
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+    document.onclick = resetTimer;
+    
+    // Initialize the timer
+    resetTimer();
+    </script>
 </body>
 </html>
