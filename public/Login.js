@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (username.length >= 4 && username.split("_").length === 2) {
             for(let i = 0; i <username.length - 1; i++){
-                if(!(username.charAt(i) == username.charAt(i).toLowerCase && username.charAt(i).toUpperCase == username.charAt(i).toLowerCase)){
+                if(!(username.charAt(i) == username.charAt(i).toLowerCase && username.charAt(i).toUpperCase != username.charAt(i).toLowerCase)){
                     letters = false;
                 }
             }
