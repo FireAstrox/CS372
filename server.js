@@ -171,7 +171,7 @@ app.post('/login', async (req, res) => {
                 res.json({ success: false, message: `Incorrect password: ${failedAttempts}` });
             }
         } else {
-            res.json({ success: false, message: 'Username not found' });
+            res.json({ success: false, message: 'User does not exist' });
         }
     } catch (error) {
         console.error('Error processing login:', error);
