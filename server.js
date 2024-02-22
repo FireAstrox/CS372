@@ -6,6 +6,7 @@ app.use(express.json());
 const router = express.Router();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
+const path = require('path');
 
 const usersFile = 'users.json';
 
@@ -138,7 +139,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/mainpage', (req, res) => {
-    res.json("Successful Login; Have fun");
+    res.sendFile(path.join(__dirname, "/public/mainpage.html"));
 });
 
 app.get('*', (req, res) => {
