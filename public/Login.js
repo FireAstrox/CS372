@@ -66,7 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (username.length >= 4 && username.split("_").length === 2) {
+           
             setFormMessage(logIn, "success", "Valid Username and password");
+            
 
             if (!(lower && upper && number && special)){
             setFormMessage(logIn, "error", "Invalid password, does not meet requirements.");    
