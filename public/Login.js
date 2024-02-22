@@ -88,17 +88,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             //User not found send error
                             setFormMessage(logIn, 'error', "User does not exist");
                         }
-                    else {if (response.message.startsWith('Incorrect Password')) {
+                    else {//if (response.message.startsWith('Incorrect Password')) {
                             //After seeing incorrect password start showing remains failed attempts
-                            if(5 - remainingAttempts <= 0){
+                            const remainingAttempts = parseInt(response.message.split(':')[1]);
+                            if(isNaN(remainingAttempts) || remainingAttempts <= 0){
                                setFormMessage(logIn, 'error', 'User has been deleted due to too many attempts');
                            }
                            else{
-                           const remainingAttempts = parseInt(response.message.split(':')[1]);
                             setFormMessage(logIn, 'error', `Incorrect Password. Remaining attempts: ${5 - remainingAttempts}`);
                            }
                         }
-                   }
+                  // }
                 });
                 }
                 else if (SignUp_test == true && LogIN_test == false) {
