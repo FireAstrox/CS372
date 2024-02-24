@@ -1,3 +1,4 @@
+// Importing required modules
 const express = require('express');
 const fs = require('fs').promises;
 const app = express();
@@ -8,6 +9,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
 const path = require('path');
 
+// File path for users data
 const usersFile = 'users.json';
 
 /*********************************************************
@@ -17,9 +19,13 @@ const usersFile = 'users.json';
 *********************************************************/
 async function findUserID(username, filePath) {
     try {
+        // Read the JSON file
         const data = await fs.readFile(filePath, 'utf8');
+        // Parse the JSON data
         const jSONuserData = JSON.parse(data);
+        // Find the user with the given username
         const user = jSONuserData.users.find(user => user.username === username);
+        // Return true if user exists, false otherwise
         return !!user;
     } 
     catch (error) {
@@ -36,9 +42,10 @@ async function findUserID(username, filePath) {
 
 async function createUser(username, password, filePath) {
     try {
+        // Read the JSON file
         let data = await fs.readFile(filePath, 'utf8');
+        // Parse the JSON data
         let jSONuserData = JSON.parse(data);
-
         // Check if the username already exists
         const userExists = jSONuserData.users.some(user => user.username === username);
 
@@ -54,7 +61,7 @@ async function createUser(username, password, filePath) {
             failedAttempts: 0
         };
 
-        // Add the new user to the JSON data
+        // Add the new user to the JSON file
         jSONuserData.users.push(newUser);
 
         // Write the updated JSON data to the file
@@ -72,6 +79,7 @@ async function createUser(username, password, filePath) {
 ----------------Get Failed Number of Attempts-------------
 ----------------------------------------------------------
 *********************************************************/
+
 async function grabFailedAttempts(username, filepath) {
     try {
         const data = await fs.readFile(filepath, 'utf8');
@@ -99,7 +107,7 @@ async function checkPasswordAttempts (username, password, filePath) {
 
         if (user) {
             if (user.password === password) {
-                // Reset failed attempts upon successful login
+                // Reset failed attempts at successful login
                 user.failedAttempts = 0;
                 await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
                 console.log(`Failed attempts for user '${username}' reset successfully to 0.`);
@@ -107,13 +115,13 @@ async function checkPasswordAttempts (username, password, filePath) {
             } else {
                 user.failedAttempts++;
                 if (user.failedAttempts >= 5) {
-                    // Delete user if failedAttempts reach 5
+                    // Delete user if failed login attempts reach 5
                     jSONuserData.users = jSONuserData.users.filter(u => u.username !== username);
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
                     console.log(`Failed attempt for user '${username}' Attempts remaing has reached 0`);
                     console.log(`User '${username}' has now been deleted, sucks to suck`);
                 } else {
-                    // Update failed attempts
+                    // Update failed login attempts
                     await fs.writeFile(filePath, JSON.stringify(jSONuserData, null, 4), 'utf8');
                     console.log(`Failed attempts for user '${username}'; Attempts remaining: ${5 - user.failedAttempts}.`);
                 }
@@ -161,8 +169,10 @@ app.post('/login', async (req, res) => {
     const password = req.body.password;
 
     try {
+        // Check if the user exists
         const userFound = await findUserID(username, usersFile);
         if (userFound) {
+            // Check if the password is correct
             const passwordCorrect = await checkPasswordAttempts(username, password, usersFile);
             // log used for trouble shooting ---- console.log ("user found");
             if (passwordCorrect) {
@@ -191,10 +201,12 @@ app.post('/signup', async (req, res) => {
     const password = req.body.password;
 
     try {
+        // Check if the user already exists
         const userFound = await findUserID(username, usersFile);
         if (userFound) {
             res.json({ success: false, message: 'User Already Exists' });
         } else {
+            // Create the user
             createUser(username, password, usersFile)
                 .then(success => {
                     if (success) {
