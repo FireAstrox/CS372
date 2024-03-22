@@ -37,7 +37,7 @@ app.use(express.static('public'));
 // Routes
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ username, password });
+  const user = await User.findUserID({ username, password });
   if (user) {
     switch(user.role) {
       case 'Viewer':
