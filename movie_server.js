@@ -15,7 +15,7 @@ const mongoData = 'mongoData.json';
 const MONGODB_URI = 'mongodb://localhost:27017';
 
 // Connect to MongoDB
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(MONGODB_URI);
 
 // User and Movie models
 const User = mongoose.model('User', new mongoose.Schema({
