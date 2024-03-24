@@ -1,3 +1,74 @@
-<html>
-    
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(to right, #6c5ce7, #c96dd9);
+        }
+        .form {
+            width: 100%;
+            max-width: 320px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #1c1c1c;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .form button:hover {
+            background: #2c2c2c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form">
+            <h2>Login</h2>
+            <form action="your-backend-endpoint.php" method="post">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required />
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required />
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <script src="movie_site.js"></script>
+</body>
 </html>

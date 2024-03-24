@@ -60,6 +60,23 @@ client.connect(async (err) => {
 app.use(bodyParser.json());
 app.use(express.static('Movie Page'));
 
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/Movie Page/movie_login.html'));
+});
+
+app.get('/viewer', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie Page/viewer.html"));
+});
+
+app.get('/content-manager', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie Page/content-manager.html"));
+});
+
+app.get('/marketing-manager', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie Page/marketing-manager.html"));
+});
+
 // Routes
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
