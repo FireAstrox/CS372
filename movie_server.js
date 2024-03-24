@@ -14,12 +14,11 @@ const mongoData = 'mongoData.json';
 const MONGODB_URI = 'mongodb://localhost:27017';
 
 const client = new MongoClient(MONGODB_URI);
-client.connect(async (err) => {
-    if (err) {
-        console.error("Failed to connect to the Database: ", err);
-    } 
-    else {
-        const db = client.db('Movie Site');
+
+async function run() {
+
+    try{
+        const db = client.db('Movie_Site');
         const moviesCollection = db.collection('Movies');
         const usersCollection = db.collection('Users');
 
@@ -27,23 +26,22 @@ client.connect(async (err) => {
         const movieGenre = '';
         let movieViewCount = 0;
         let movieLikeCount = 0;
-
+        const videoURL = '';
 
         const user = {
-            username: 'Content Manager',
+            username: 'Marketing-Manager',
             password: 'password'
-        };
-
-    try {
-        const userResult = await usersCollection.insertOne(user);
-        console.log('User document inserted with _id:', userResult.insertedId);
+        }
     
+        const userResult = await usersCollection.insertOne(user);
+        console.log(`User document inserted with _id: ${userResult.insertedId}`);
+
         const movieResult = await moviesCollection.insertOne({
             title: movieTitle,
             genre: movieGenre,
             viewCount: movieViewCount,
             likeCount: movieLikeCount,
-            user_id: userResult.insertedId
+            videoUrl: videoURL,
         });
         console.log('Movie document inserted with _id:', movieResult.insertedId);
     }
@@ -54,7 +52,7 @@ client.connect(async (err) => {
        await client.close();
     }
     }
-});
+run().catch(console.dir);
 
 // Middleware
 app.use(bodyParser.json());
