@@ -4,7 +4,6 @@ app.use(express.static('Movie Page'));
 app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
-const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 
 const path = require('path');
