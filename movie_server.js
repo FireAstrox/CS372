@@ -4,7 +4,7 @@ app.use(express.static('Movie Page'));
 app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 
 const path = require('path');
 
@@ -13,26 +13,69 @@ const mongoData = 'mongoData.json';
 // MongoDB URI
 const MONGODB_URI = 'mongodb://localhost:27017';
 
-// Connect to MongoDB
-mongoose.connect(MONGODB_URI);
+const client = new MongoClient(MONGODB_URI);
+client.connect(async (err) => {
+    if (err) {
+        console.error("Failed to connect to the Database: ", err);
+    } 
+    else {
+        const db = client.db('Movie Site');
+        const moviesCollection = db.collection('Movies');
+        const usersCollection = db.collection('Users');
 
-// User and Movie models
-const User = mongoose.model('User', new mongoose.Schema({
-  username: String,
-  password: String,
-  role: String,
-}));
+        const movieTitle = '';
+        const movieGenre = '';
+        let movieViewCount = 0;
+        let movieLikeCount = 0;
 
-const Movie = mongoose.model('Movie', new mongoose.Schema({
-  title: String,
-  genre: String,
-  viewCount: Number,
-  likeCount: Number,
-}));
+
+        const user = {
+            username: 'Content Manager',
+            password: 'password'
+        };
+
+    try {
+        const userResult = await usersCollection.insertOne(user);
+        console.log('User document inserted with _id:', userResult.insertedId);
+    
+        const movieResult = await moviesCollection.insertOne({
+            title: movieTitle,
+            genre: movieGenre,
+            viewCount: movieViewCount,
+            likeCount: movieLikeCount,
+            user_id: userResult.insertedId
+        });
+        console.log('Movie document inserted with _id:', movieResult.insertedId);
+    }
+    catch (err) {
+        console.error('An error occurred inserting the document: ', err);
+    } 
+    finally {
+       await client.close();
+    }
+    }
+});
 
 // Middleware
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static('Movie Page'));
+
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/Movie Page/movie_login.html'));
+});
+
+app.get('/viewer', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie Page/viewer.html"));
+});
+
+app.get('/content-manager', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie Page/content-manager.html"));
+});
+
+app.get('/marketing-manager', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie Page/marketing-manager.html"));
+});
 
 // Routes
 app.post('/login', async (req, res) => {
