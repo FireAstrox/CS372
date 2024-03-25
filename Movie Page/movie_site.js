@@ -14,36 +14,50 @@
 // }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login');
+    const loginForm = document.getElementById('Login');
+
+    // let login = false;
+
+    // if(loginForm == "Login"){
+    //     console.log("Login");
+    //     login = true;
+    // }
+    // else{
+    //     console.log("fail");
+    //     login = false;
+    // }
 
     loginForm.addEventListener('submit', e => {
         e.preventDefault(); 
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
 
         const userData = { 
             username:username, 
             password:password 
         }
-
+//if (login == true){
         $.post('/login', userData, (response) => {
-            if (response.success && username == "viewer") {
+            if (response.success ){//&& username == "viewer") {
 
-                window.location.href = "/viewer";
+                window.location.href = "/Movie Page/viewer";
+            console.log(response.message);
             }
-            else if (response.success && username == "Content-Manager") {
+            // else if (response.success && username == "Content-Manager") {
 
-                window.location.href = "/content-manager";
-            }
-            else if (response.success && username == "Marketing-Manager"){
+            //     window.location.href = "/content-manager";
+            // }
+            // else if (response.success && username == "Marketing-Manager"){
                 
-                window.location.href = "/marketing-manager";
-            }
+            //     window.location.href = "/marketing-manager";
+            // }
             else {
                 //setFormMessage( "Invalid Username or Password.", 'error', response.message);
+                alert(response.message);
             }
         })
+    //}
         
         });
     });

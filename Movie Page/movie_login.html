@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /* Add some basic styling */
         body {
@@ -17,7 +18,7 @@
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
-            background: linear-gradient(to right, #6c5ce7, #c96dd9);
+            background: linear-gradient(to right, #09090c, #b90101);
         }
         .form {
             width: 100%;
@@ -58,7 +59,7 @@
     <div class="container">
         <div class="form">
             <h2>Login</h2>
-            <form action="your-backend-endpoint.php" method="post">
+            <form id="Login">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required />
 
