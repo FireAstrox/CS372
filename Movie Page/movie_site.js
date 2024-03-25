@@ -13,36 +13,37 @@ function setFormMessage(formElement, type, message) {
     messageElement.classList.add(`form__message--${type}`);
 }
 
-document.addEventLisntener('DOMContentLoaded', function() {
+document.addEventLisntener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
 
-    loginForm.addEventListener('submit', function (e){
-        e.preventDefault(); 
+    loginForm.addEventListener('submit', (event) => {
+        event.preventDefault(); 
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        const userData = {
-            username: username,
-            password: password
-        };
+        const userData = { 
+            username:username, 
+            password:password 
+        }
 
-        fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                 if (data.redirect) {
+        $.post('/login', userData, (response) => {
+            if (response.success && username == "viewer") {
 
-                    window.location.href = data.redirect;
-                 }
-                 else{
+                window.location.href = "/viewer";
+            }
+            else if (response.success && username == "Content-Manager") {
 
-                    alert('Login failed. Please try again.');
-    }});
+                window.location.href = "/content-manager";
+            }
+            else if (response.success && username == "Marketing-Manager"){
+                
+                window.location.href = "/marketing-manager";
+            }
+            else {
+                setFormMessage( "Invalid Username or Password.", 'error', response.message);
+            }
+        })
+        
+        });
     });
-});

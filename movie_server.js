@@ -22,32 +22,32 @@ async function run() {
         const moviesCollection = db.collection('Movies');
         const usersCollection = db.collection('Users');
 
-        const movieTitle = '';
-        const movieGenre = '';
-        let movieViewCount = 0;
-        let movieLikeCount = 0;
-        const videoURL = '';
+        // const movieTitle = '';
+        // const movieGenre = '';
+        // let movieViewCount = 0;
+        // let movieLikeCount = 0;
+        // const videoURL = '';
 
-        const user = {
-           username: 'Content-Manager',
-           password: 'password'
-        }
+      //   const user = {
+      //      username: 'Content-Manager',
+      //      password: 'password'
+      //   }
 
-        const user2 = {
-          username: 'viewer',
-          password: 'password'
-       }
+      //   const user2 = {
+      //     username: 'viewer',
+      //     password: 'password'
+      //  }
     
-        const userResult = await usersCollection.insertOne(user);
+        //const userResult = await usersCollection.insertOne(user);
         console.log(`User document inserted with _id: ${userResult.insertedId}`);
-        const user2Result = await usersCollection.insertOne(user2);
-        const movieResult = await moviesCollection.insertOne({
-            title: movieTitle,
-            genre: movieGenre,
-            viewCount: movieViewCount,
-            likeCount: movieLikeCount,
-            videoUrl: videoURL,
-        });
+        
+        // const movieResult = await moviesCollection.insertOne({
+        //     title: movieTitle,
+        //     genre: movieGenre,
+        //     viewCount: movieViewCount,
+        //     likeCount: movieLikeCount,
+        //     videoUrl: videoURL,
+        //});
         console.log('Movie document inserted with _id:', movieResult.insertedId);
     }
     catch (err) {
@@ -80,22 +80,25 @@ app.get('/marketing-manager', (req, res) => {
     res.sendFile(path.join(__dirname, "/Movie Page/marketing-manager.html"));
 });
 
+app.get('*', (req, res) => {
+  res.json("page not found");
+});
+
 // Routes
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const usersCollection = db.collection('Users');
 
   try {
-    const user = await usersCollection.findOne({ username, password });
-  if (user) {
+    const userFound = await findUser(username);
+  if (userFound) {
     switch(user.role) {
-      case 'Viewer':
+      case 'viewer':
         res.json({ redirect: '/viewer.html' });
         break;
-      case 'Content Manager':
+      case 'Content-Manager':
         res.json({ redirect: '/content-manager.html' });
         break;
-      case 'Marketing Manager':
+      case 'Marketing-Manager':
         res.json({ redirect: '/marketing-manager.html' });
         break;
       default:
@@ -113,3 +116,34 @@ app.post('/login', async (req, res) => {
 app.listen(8080, () => {
     console.log("Server is running on port", 8080);
 });
+
+
+/*********************************************************
+----------------------------------------------------------
+----------------Find User in Database---------------------
+----------------------------------------------------------
+*********************************************************/
+
+async function findUser(username){
+  try{
+
+    const usersCollection = db.collection('Users');
+
+    const user = await usersCollection.findOne({ username });
+
+    return user;
+  }
+  catch (error) {
+    console.error('Error finding user', error);
+    throw error;
+  }
+}
+
+
+/*********************************************************
+----------------------------------------------------------
+----------------Verify User Password----------------------
+----------------------------------------------------------
+*********************************************************/
+
+async function verifyPassword()
