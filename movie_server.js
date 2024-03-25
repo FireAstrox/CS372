@@ -5,8 +5,9 @@ app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
 const { MongoClient } = require('mongodb');
-
+const crypto = require('crypto');
 const path = require('path');
+app.use(bodyParser.json());
 
 const mongoData = 'mongoData.json';
 
@@ -14,51 +15,62 @@ const mongoData = 'mongoData.json';
 const MONGODB_URI = 'mongodb://localhost:27017';
 
 const client = new MongoClient(MONGODB_URI);
-client.connect(async (err) => {
-    if (err) {
-        console.error("Failed to connect to the Database: ", err);
-    } 
-    else {
-        const db = client.db('Movie Site');
-        const moviesCollection = db.collection('Movies');
-        const usersCollection = db.collection('Users');
-
-        const movieTitle = '';
-        const movieGenre = '';
-        let movieViewCount = 0;
-        let movieLikeCount = 0;
 
 
-        const user = {
-            username: 'Content Manager',
-            password: 'password'
-        };
+const presetUsers = [
+  { username: 'Viewer', password: 'password', role: 'Viewer' },
+  { username: 'Content-Manager', password: 'password', role: 'Content Manager' },
+  { username: 'Marketing-Manager', password: 'password', role: 'Marketing Manager' }
+];
 
-    try {
-        const userResult = await usersCollection.insertOne(user);
-        console.log('User document inserted with _id:', userResult.insertedId);
-    
-        const movieResult = await moviesCollection.insertOne({
-            title: movieTitle,
-            genre: movieGenre,
-            viewCount: movieViewCount,
-            likeCount: movieLikeCount,
-            user_id: userResult.insertedId
-        });
-        console.log('Movie document inserted with _id:', movieResult.insertedId);
-    }
-    catch (err) {
-        console.error('An error occurred inserting the document: ', err);
-    } 
-    finally {
-       await client.close();
-    }
-    }
-});
 
-// Middleware
-app.use(bodyParser.json());
-app.use(express.static('Movie Page'));
+/*********************************************************
+----------------------------------------------------------
+----------------Verify User Password----------------------
+----------------------------------------------------------
+*********************************************************/
+
+
+
+function hashPassword(password, salt) {
+  const hash = crypto.createHash('sha256');
+  hash.update(password + salt);
+  return hash.digest('hex');
+}
+function generateSalt(length = 16) {
+  return crypto.randomBytes(length).toString('hex');
+}
+async function verifyPassword(submittedPassword, storedHash, storedSalt) {
+  const hashedSumbittedPassword = hashPassword(submittedPassword, storedSalt);
+  return hashedSumbittedPassword === storedHash;
+}
+
+
+async function initializeDbConnection() {
+    await client.connect();
+    db = client.db('Movie_Site');
+    console.log('Connected to MongoDB');
+    const usersCollection = db.collection('Users');
+
+    for (let user of presetUsers) {
+      const salt = generateSalt();
+      const hashedPassword = hashPassword(user.password, salt);
+
+      await usersCollection.updateOne(
+        { username: user.username },
+        { $set: { hashedPassword, salt, role: user.role } },
+        { upsert: true }
+    );
+    console.log(`User ${user.username} added/updated successfully`);
+}
+    // await client.close();
+    // console.log('Disconnected from MongoDB');
+}
+
+initializeDbConnection().catch(console.error);
+
+
+
 
 
 app.get('/', (req, res) => {
@@ -77,19 +89,25 @@ app.get('/marketing-manager', (req, res) => {
     res.sendFile(path.join(__dirname, "/Movie Page/marketing-manager.html"));
 });
 
+app.get('*', (req, res) => {
+  res.json("page not found");
+});
+
 // Routes
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findUserID({ username, password });
-  if (user) {
-    switch(user.role) {
+  const { username, submittedPassword } = req.body;
+
+  try {
+    const userFound = await findUser(username);
+  if (userFound &&  await verifyPassword(submittedPassword, user.hashedPassword, user.salt)) {
+    switch(userFound.role) {
       case 'Viewer':
         res.json({ redirect: '/viewer.html' });
         break;
-      case 'Content Manager':
+      case 'Content-Manager':
         res.json({ redirect: '/content-manager.html' });
         break;
-      case 'Marketing Manager':
+      case 'Marketing-Manager':
         res.json({ redirect: '/marketing-manager.html' });
         break;
       default:
@@ -98,8 +116,34 @@ app.post('/login', async (req, res) => {
   } else {
     res.status(401).send('Unauthorized');
   }
+  } catch (error) {
+    console.error('Error logging in', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.listen(8080, () => {
     console.log("Server is running on port", 8080);
 });
+
+
+/*********************************************************
+----------------------------------------------------------
+----------------Find User in Database---------------------
+----------------------------------------------------------
+*********************************************************/
+
+async function findUser(username){
+  try{
+
+    const usersCollection = db.collection('Users');
+
+    const user = await usersCollection.findOne({ username });
+
+    return user;
+  }
+  catch (error) {
+    console.error('Error finding user', error);
+    throw error;
+  }
+}

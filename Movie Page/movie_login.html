@@ -53,12 +53,13 @@
             background: #2c2c2c;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="form">
             <h2>Login</h2>
-            <form action="your-backend-endpoint.php" method="post">
+            <form class="loginForm" id="login">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required />
 
