@@ -16,7 +16,6 @@ const MONGODB_URI = 'mongodb://localhost:27017';
 
 const client = new MongoClient(MONGODB_URI);
 
-let db;
 
 const presetUsers = [
   { username: 'Viewer', password: 'password', role: 'Viewer' },
@@ -64,45 +63,14 @@ async function initializeDbConnection() {
     );
     console.log(`User ${user.username} added/updated successfully`);
 }
-    await client.close();
-    console.log('Disconnected from MongoDB');
+    // await client.close();
+    // console.log('Disconnected from MongoDB');
 }
 
 initializeDbConnection().catch(console.error);
 
 
 
-
-async function run() {
-
-
-    try{
-        const moviesCollection = db.collection('Movies');
-
-        const movieTitle = '';
-        const movieGenre = '';
-        let movieViewCount = 0;
-        let movieLikeCount = 0;
-        const videoURL = '';
-
-        
-        // const movieResult = await moviesCollection.insertOne({
-        //     title: movieTitle,
-        //     genre: movieGenre,
-        //     viewCount: movieViewCount,
-        //     likeCount: movieLikeCount,
-        //     videoUrl: videoURL,
-        //});
-        console.log('Movie document inserted with _id:', movieResult.insertedId);
-    }
-    catch (err) {
-        console.error('An error occurred inserting the document: ', err);
-    } 
-    finally {
-       await client.close();
-    }
-    }
-run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
@@ -131,9 +99,9 @@ app.post('/login', async (req, res) => {
 
   try {
     const userFound = await findUser(username);
-  if (userFound && verifyPassword(submittedPassword, user.hashedPassword, user.salt)) {
-    switch(user.role) {
-      case 'viewer':
+  if (userFound &&  await verifyPassword(submittedPassword, user.hashedPassword, user.salt)) {
+    switch(userFound.role) {
+      case 'Viewer':
         res.json({ redirect: '/viewer.html' });
         break;
       case 'Content-Manager':

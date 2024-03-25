@@ -1,23 +1,23 @@
 // Function to set a form message
-function setFormMessage(formElement, type, message) {
-    // Select the message element
-    const messageElement = formElement.querySelector(".form__message");
+// function setFormMessage(formElement, type, message) {
+//     // Select the message element
+//     const messageElement = formElement.querySelector(".form__message");
     
-    // Set the text content of the message element
-    messageElement.textContent = message;
+//     // Set the text content of the message element
+//     messageElement.textContent = message;
     
-    // Remove any existing message classes
-    messageElement.classList.remove("form__message--success", "form__message--error", "form--hidden");
+//     // Remove any existing message classes
+//     messageElement.classList.remove("form__message--success", "form__message--error", "form--hidden");
     
-    // Add the new message class
-    messageElement.classList.add(`form__message--${type}`);
-}
+//     // Add the new message class
+//     messageElement.classList.add(`form__message--${type}`);
+// }
 
-document.addEventLisntener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login');
 
-    loginForm.addEventListener('submit', (event) => {
-        event.preventDefault(); 
+    loginForm.addEventListener('submit', e => {
+        e.preventDefault(); 
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -41,7 +41,7 @@ document.addEventLisntener('DOMContentLoaded', () => {
                 window.location.href = "/marketing-manager";
             }
             else {
-                setFormMessage( "Invalid Username or Password.", 'error', response.message);
+                //setFormMessage( "Invalid Username or Password.", 'error', response.message);
             }
         })
         
