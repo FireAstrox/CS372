@@ -29,13 +29,18 @@ async function run() {
         const videoURL = '';
 
         const user = {
-            username: 'Marketing-Manager',
-            password: 'password'
+           username: 'Content-Manager',
+           password: 'password'
         }
+
+        const user2 = {
+          username: 'viewer',
+          password: 'password'
+       }
     
         const userResult = await usersCollection.insertOne(user);
         console.log(`User document inserted with _id: ${userResult.insertedId}`);
-
+        const user2Result = await usersCollection.insertOne(user2);
         const movieResult = await moviesCollection.insertOne({
             title: movieTitle,
             genre: movieGenre,
@@ -56,7 +61,7 @@ run().catch(console.dir);
 
 // Middleware
 app.use(bodyParser.json());
-app.use(express.static('Movie Page'));
+
 
 
 app.get('/', (req, res) => {
@@ -78,7 +83,10 @@ app.get('/marketing-manager', (req, res) => {
 // Routes
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findUserID({ username, password });
+  const usersCollection = db.collection('Users');
+
+  try {
+    const user = await usersCollection.findOne({ username, password });
   if (user) {
     switch(user.role) {
       case 'Viewer':
@@ -95,6 +103,10 @@ app.post('/login', async (req, res) => {
     }
   } else {
     res.status(401).send('Unauthorized');
+  }
+  } catch (error) {
+    console.error('Error logging in', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
