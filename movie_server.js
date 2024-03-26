@@ -125,7 +125,7 @@ app.get('*', (req, res) => {
 
 // Routes
 app.post('/login', async (req, res) => {
-  const { username, submittedPassword } = req.body;
+  const { username, password } = req.body;
 
   try {
     const usersCollection = await initializeDbConnection('Users');
@@ -139,7 +139,7 @@ app.post('/login', async (req, res) => {
     }
     else {
       res.json({ success: false, message: 'Incorrect Password'});
-      console.log ('something wrong')
+      console.log ('something wrong bad password')
     }
   
   // switch(userFound.role) {
