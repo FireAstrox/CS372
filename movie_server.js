@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-app.use(express.static('Movie Page'));
+app.use(express.static('Movie_Page'));
 app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
@@ -42,7 +42,7 @@ async function verifyPassword(username, password, collection) {
   if (userFound) {
     const hash = crypto.createHash('sha256').update(password).digest('hex');
 
-    if (userFound.password === hash){
+    if (userFound.hashedPassword === hash){
       return true
     }
     else{
@@ -54,6 +54,45 @@ async function verifyPassword(username, password, collection) {
     return false;
   }
 }
+
+//helper functions to fix the password hashes
+
+// function correctHashPassword(password) {
+//   if (!hashedPassword) {
+//     throw new Error('Password is undefined, cannot hash.');
+// }
+// const hash = crypto.createHash('sha256');
+// hash.update(hashedPassword);
+// return hash.digest('hex');
+// }
+
+// async function updatePasswordHashes() {
+//   await client.connect();
+//   const db = client.db('Movie_Site');
+//   const usersCollection = db.collection('Users');
+
+//   const users = await usersCollection.find().toArray(); // Gets all users
+
+//   for (const user of users) {
+//     if (typeof user.password === 'undefined') {
+//       console.error(`User ${user.username} has no password defined.`);
+//       continue; // Skip this user and move to the next
+//   }  
+    
+//     const correctHash = correctHashPassword(user.password); // Assume 'user.password' is the original plain text password
+
+//       await usersCollection.updateOne(
+//           { _id: user._id }, // Use the unique identifier for the user document
+//           { $set: { password: correctHash } } // Update the password field with the correct hash
+//       );
+//   }
+
+//   console.log('All passwords updated.');
+//   client.close();
+// }
+
+// updatePasswordHashes().catch(console.error);
+
 /*********************************************************
 ----------------------------------------------------------
 ----------------Make MongoDB Connection-------------------
@@ -93,26 +132,26 @@ initializeDbConnection().catch(console.error);
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/Movie Page/movie_login.html'));
+    res.sendFile(path.join(__dirname, '/Movie_Page/movie_login.html'));
 });
 
 app.get('/viewer', (req, res) => {
-    res.sendFile(path.join(__dirname, "/Movie Page/viewer.html"));
+    res.sendFile(path.join(__dirname, "/Movie_Page/viewer.html"));
 });
 
 app.get('/content-manager', (req, res) => {
-    res.sendFile(path.join(__dirname, "/Movie Page/content-manager.html"));
+    res.sendFile(path.join(__dirname, "/Movie_Page/content-manager.html"));
 });
 
 app.get('/marketing-manager', (req, res) => {
-    res.sendFile(path.join(__dirname, "/Movie Page/marketing-manager.html"));
+    res.sendFile(path.join(__dirname, "/Movie_Page/marketing-manager.html"));
 });
 
 app.get('/addMovies', async (req, res) => {
   // try {
   //     const moviesCollection = await connectToMongoDB("Movies");
   //     const movies = await moviesCollection.find().toArray();
-      res.sendFile(path.join(__dirname, "/Movie Page/content-add.html"));
+      res.sendFile(path.join(__dirname, "/Movie_Page/content-add.html"));
       //res.json(movies);
   // } catch (error) {
   //     console.error('Error fetching movies:', error);
@@ -134,7 +173,7 @@ app.post('/login', async (req, res) => {
     console.log("user found");
     const passwordCorrect = await verifyPassword(username, password, usersCollection);
     if(passwordCorrect) {
-      res.json({ success: true, message: 'Login Successful'});
+      res.json({ success: true, role: userFound.role, message: 'Login Successful'});
       console.log ("login success");
     }
     else {

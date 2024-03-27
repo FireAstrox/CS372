@@ -39,19 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 //if (login == true){
         $.post('/login', userData, (response) => {
-            if (response.success ){//&& username == "viewer") {
-
-                window.location.href = "/Movie Page/viewer";
+            if (response.success ){
             console.log(response.message);
-            }
-            // else if (response.success && username == "Content-Manager") {
-
-            //     window.location.href = "/content-manager";
-            // }
-            // else if (response.success && username == "Marketing-Manager"){
-                
-            //     window.location.href = "/marketing-manager";
-            // }
+                if(response.role === 'Viewer') {
+                    window.location.href = "/viewer.html";
+                }
+                else if(response.role === 'Content-Manager') {
+                    window.location.href = '/content-manager.html';
+                }
+                else if (response.role === 'Marketing-Manager') {
+                    window.location.href = '/marketing-manager.html';    
+                }
+        }
             else {
                 //setFormMessage( "Invalid Username or Password.", 'error', response.message);
                 alert(response.message);
