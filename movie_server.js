@@ -9,7 +9,6 @@ const crypto = require('crypto');
 const path = require('path');
 app.use(bodyParser.json());
 
-const mongoData = 'mongoData.json';
 
 // MongoDB URI
 const MONGODB_URI = 'mongodb://localhost:27017';
