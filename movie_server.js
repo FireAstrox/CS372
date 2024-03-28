@@ -4,7 +4,7 @@ app.use(express.static('Movie_Page'));
 app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const crypto = require('crypto');
 const path = require('path');
 app.use(bodyParser.json());
@@ -252,9 +252,12 @@ async function findUser(username, collection){
 
 app.delete('/deleteMovie/:movieId', async (req, res) => {
   const { movieId } = req.params;
+  if (!movieId || !ObjectId.isValid(movieId)) {
+    return res.status(400).json({ success: false, message: 'Invalid movie ID format' });
+}
   try {
       const moviesCollection = await initializeDbConnection('Movies');
-      const result = await moviesCollection.deleteOne({ _id: new MongoClient.ObjectId(movieId) });
+      const result = await moviesCollection.deleteOne({ _id: new ObjectId(movieId) });
       if (result.deletedCount === 1) {
           console.log('Movie deleted successfully');
           res.json({ success: true, message: 'Movie deleted successfully' });

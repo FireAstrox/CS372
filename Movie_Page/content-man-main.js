@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h3>${movie.title}</h3>
                 <p>Genre: ${movie.genre}</p>
                 <p>URL: <a href="${movie.videoUrl}" target="_blank">${movie.videoUrl}</a></p>
+                <p>Likes: ${movie.likes}</p>
                 <button class="delete-button" onclick="deleteMovie('${movie._id}')">Delete</button>
             `;
             movieListDiv.appendChild(movieElement);
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', function() {
             const movieId = this.getAttribute('data-movie-id');
+            console.log("Deleting movie with ID:", movieId);
             // Send a request to delete the movie
             fetch(`/deleteMovie/${movieId}`, { method: 'DELETE' })
                 .then(response => response.json())
@@ -49,10 +51,28 @@ document.addEventListener("DOMContentLoaded", async () => {
                         alert('Movie deleted successfully');
                         // Optionally, remove the movie element from the page
                     } else {
-                        alert('Failed to delete movie');
+                       // alert('Failed to delete movie');
                     }
                 })
                 .catch(error => console.error('Error deleting movie:', error));
         });
     });
 });
+
+async function deleteMovie(movieId) {
+    console.log("Attempting to delete movie with ID:", movieId);
+    try {
+        const response = await fetch(`/deleteMovie/${movieId}`, { method: 'DELETE' });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to delete movie');
+        }
+        alert('Movie deleted successfully');
+        window.location.reload(); // Refresh the page to update the list
+    } catch (error) {
+        console.error('Error deleting movie:', error);
+        alert('Error deleting movie. Please try again.');
+    }
+}
