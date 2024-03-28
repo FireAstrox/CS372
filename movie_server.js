@@ -232,3 +232,20 @@ async function findUser(username, collection){
     throw error;
   }
 }
+
+app.delete('/deleteMovie/:movieId', async (req, res) => {
+  const { movieId } = req.params;
+  try {
+      const moviesCollection = await initializeDbConnection('Movies');
+      const result = await moviesCollection.deleteOne({ _id: new MongoClient.ObjectId(movieId) });
+      if (result.deletedCount === 1) {
+          console.log('Movie deleted successfully');
+          res.json({ success: true, message: 'Movie deleted successfully' });
+      } else {
+          throw new Error('Movie deletion failed');
+      }
+  } catch (error) {
+      console.error('Failed to delete movie:', error);
+      res.status(500).json({ success: false, message: 'Failed to delete movie' });
+  }
+});

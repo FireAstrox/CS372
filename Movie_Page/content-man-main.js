@@ -29,4 +29,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = '/deleteMovies';
         console.log("Successful Delete detection");
     });
+
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const movieId = this.getAttribute('data-movie-id');
+            // Send a request to delete the movie
+            fetch(`/deleteMovie/${movieId}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Movie deleted successfully');
+                        // Optionally, remove the movie element from the page
+                    } else {
+                        alert('Failed to delete movie');
+                    }
+                })
+                .catch(error => console.error('Error deleting movie:', error));
+        });
+    });
 });
