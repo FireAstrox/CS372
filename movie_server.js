@@ -159,7 +159,7 @@ app.get('/addMovies', async (req, res) => {
 });
 
 app.post('/addMovie', async (req, res) =>{
-  const { title, genre, videoUrl, likes} = req.body;
+  const { title, genre, videoUrl, likes } = req.body;
     try {
       const moviesCollection = await initializeDbConnection('Movies');
       const result = await moviesCollection.insertOne({ title, genre, videoUrl, likes });
@@ -267,5 +267,31 @@ app.delete('/deleteMovie/:movieId', async (req, res) => {
   } catch (error) {
       console.error('Failed to delete movie:', error);
       res.status(500).json({ success: false, message: 'Failed to delete movie' });
+  }
+});
+
+app.post('/addComment/:movieId', async (req, res) => {
+  const { movieId } = req.params;
+  const { username, comment } = req.body;
+
+  if (!ObjectId.isValid(movieId)) {
+    return res.status(400).send('Invalid movie ID.');
+  }
+
+  try {
+    const moviesCollection = await initializeDbConnection('Movies');
+    const result = await moviesCollection.updateOne(
+      { _id: new ObjectId(movieId) },
+      { $push: { comments: { username, comment, timestamp: new Date().toISOString() } } }
+    );
+
+    if (result.matchedCount === 1) {
+      res.json({ success: true, message: 'Comment added successfully.' });
+    } else {
+      res.status(404).send('Movie not found.');
+    }
+  } catch (error) {
+    console.error('Failed to add comment:', error);
+    res.status(500).send('Failed to add comment.');
   }
 });
