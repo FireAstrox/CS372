@@ -6,19 +6,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const title = document.getElementById("title").value;
         const genre = document.getElementById("genre").value;
-        const link = document.getElementById("link").value;
+        const videoUrl = document.getElementById("link").value;
 
         const movieInfo = {
             title:title,
             genre:genre,
-            link:link
+            videoUrl:videoUrl,
+            likes: 0
         }
 
         $.post('/addMovie', movieInfo, (response) => {
             if (response.success) {
                 alert("Movie added successfully!");
                 // Successful addition, redirect to another page
-                window.location.href = '/movies';
+               window.location.href = '/content-manager';
             } else {
                 alert("Error adding movie. Please try again.");
             }

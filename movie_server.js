@@ -18,8 +18,8 @@ const client = new MongoClient(MONGODB_URI);
 
 const presetUsers = [
   { username: 'Viewer', password: 'password', role: 'Viewer' },
-  { username: 'Content-Manager', password: 'password', role: 'Content Manager' },
-  { username: 'Marketing-Manager', password: 'password', role: 'Marketing Manager' }
+  { username: 'Content-Manager', password: 'password', role: 'Content-Manager' },
+  { username: 'Marketing-Manager', password: 'password', role: 'Marketing-Manager' }
 ];
 
 
@@ -157,6 +157,39 @@ app.get('/addMovies', async (req, res) => {
   //     res.status(500).json({ success: false, message: 'Internal server error' });
   // }
 });
+
+app.post('/addMovie', async (req, res) =>{
+  const { title, genre, videoUrl, likes} = req.body;
+    try {
+      const moviesCollection = await initializeDbConnection('Movies');
+      const result = await moviesCollection.insertOne({ title, genre, videoUrl, likes });
+      if (result.acknowledged) {
+        console.log('Movie added successfully'); 
+        res.json({ success: true, message: 'Movie added successfully'});
+      }
+      else {
+        throw new Error('Movie insertion failed');
+      }
+    }
+    catch (error) {
+      console.error('Failed to add movie:, error ')
+      res.status(500).json({ success: false, message: 'Failed to add movie' });
+    }
+});
+
+
+app.get('/movies', async (req, res) => {
+  try {
+      const moviesCollection = await initializeDbConnection("Movies");
+      const movies = await moviesCollection.find().toArray();
+      res.json(movies); // Assuming you are using a template engine like EJS
+  } catch (error) {
+      console.error('Error fetching movies:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
 app.get('*', (req, res) => {
   res.json("page not found");
 });
@@ -179,23 +212,7 @@ app.post('/login', async (req, res) => {
       res.json({ success: false, message: 'Incorrect Password'});
       console.log ('something wrong bad password')
     }
-  
-  // switch(userFound.role) {
-  //     case 'Viewer':
-  //       res.json({ success: true, message: "login success" });
-  //       break;
-  //     case 'Content-Manager':
-  //       res.json({ redirect: '/content-manager.html' });
-  //       break;
-  //     case 'Marketing-Manager':
-  //       res.json({ redirect: '/marketing-manager.html' });
-  //       break;
-  //     default:
-  //       res.status(401).send('Unauthorized');
-  //   }
-  // } else {
-  //   res.status(401).send('Unauthorized');
-  // }
+ 
   }
   else {
     console.log("User not found");

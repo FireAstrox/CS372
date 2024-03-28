@@ -1,18 +1,26 @@
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch('/movies');
-        const html = await response.text();
-        
-        // Create a temporary element to parse the received HTML
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = html;
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const Movies = await response.json();
 
-        // Extract only the content within the movieList element
-        const movieListContent = tempElement.querySelector('#movieList').innerHTML;
-
-        // Replace the content of movieListDiv with the extracted content
         const movieListDiv = document.getElementById("movieList");
-        movieListDiv.innerHTML = movieListContent;
+        movieListDiv.innerHTML = ''; // Clear existing content
+
+        Movies.forEach(movie => {
+            // Assuming each movie object has 'title', 'genre', and 'link' properties
+            const movieElement = document.createElement('div');
+            movieElement.classList.add('movie-item');
+            movieElement.innerHTML = `
+                <h3>${movie.title}</h3>
+                <p>Genre: ${movie.genre}</p>
+                <p>URL: <a href="${movie.videoUrl}" target="_blank">${movie.videoUrl}</a></p>
+                <button class="delete-button" onclick="deleteMovie('${movie._id}')">Delete</button>
+            `;
+            movieListDiv.appendChild(movieElement);
+        });
     } catch (error) {
         console.error('Error fetching movies:', error);
         alert("Error fetching movies. Please try again.");
@@ -24,11 +32,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("Successful Add detection");
     });
 
-    const deleteButton = document.getElementById("delete");
-    deleteButton.addEventListener("click", () => {
-        window.location.href = '/deleteMovies';
-        console.log("Successful Delete detection");
-    });
+    // const deleteButton = document.getElementById("delete");
+    // deleteButton.addEventListener("click", () => {
+    //     window.location.href = '/deleteMovies';
+    //     console.log("Successful Delete detection");
+    // });
 
     document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', function() {
