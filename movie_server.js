@@ -99,25 +99,10 @@ async function verifyPassword(username, password, collection) {
 *********************************************************/
 const dbName = 'Movie_Site';
 async function initializeDbConnection(collectionName) {
-   try{
+  console.log('Connected to MongoDB'); 
+  try{
      await client.connect();
-    console.log('Connected to MongoDB');
-//     db = client.db('Movie_Site'); // Connecting to the database
 
-//     for (let user of presetUsers) {
-//       const salt = generateSalt();
-//       const hashedPassword = hashPassword(user.password, salt);
-
-//       const usersCollection = db.collection('Users');
-//       await usersCollection.updateOne(
-//         { username: user.username },
-//         { $set: { hashedPassword, salt, role: user.role } },
-//         { upsert: true }
-//     );
-//     console.log(`User ${user.username} added/updated successfully`);
-// }
-    // await client.close();
-    // console.log('Disconnected from MongoDB');
     return client.db(dbName).collection(collectionName)
   }
   catch (error) {
@@ -287,6 +272,7 @@ app.post('/addComment/:movieId', async (req, res) => {
 
     if (result.matchedCount === 1) {
       res.json({ success: true, message: 'Comment added successfully.' });
+      console.log('Comment added Successfully');
     } else {
       res.status(404).send('Movie not found.');
     }

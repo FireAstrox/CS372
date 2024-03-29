@@ -19,6 +19,7 @@ function fetchMovies() {
                 <div class="movie-item">
                     <h3>${movie.title}</h3>
                     <p>Genre: ${movie.genre}</p>
+                    <p>Likes: ${movie.likes}</p>
                     ${renderCommentsForm(movie._id)}
                     ${renderComments(movie.comments)}
                 </div>
