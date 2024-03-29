@@ -145,6 +145,11 @@ app.get('/addMovies', async (req, res) => {
 
 app.post('/addMovie', async (req, res) =>{
   const { title, genre, videoUrl, likes } = req.body;
+
+  // Convert likes to an integer
+  likes = parseInt(likes, 10);
+  if (isNaN(likes)) likes = 0; // Default to 0 if conversion fails
+  
     try {
       const moviesCollection = await initializeDbConnection('Movies');
       const result = await moviesCollection.insertOne({ title, genre, videoUrl, likes });
@@ -279,5 +284,32 @@ app.post('/addComment/:movieId', async (req, res) => {
   } catch (error) {
     console.error('Failed to add comment:', error);
     res.status(500).send('Failed to add comment.');
+  }
+});
+
+app.post('/likeMovie/:movieId', async (req, res) => {
+  const { movieId } = req.params;
+  // This example assumes each viewer can like the movie once and toggles like status
+  // Adjust according to your application's needs
+  if (!ObjectId.isValid(movieId)) {
+    return res.status(400).send('Invalid movie ID.');
+  }
+
+  try {
+    const moviesCollection = await initializeDbConnection('Movies');
+    // This is a simplistic approach; you might want to track individual viewer likes in a more complex app
+    const result = await moviesCollection.updateOne(
+      { _id: new ObjectId(movieId) },
+      { $inc: { likes: 1 } } // Increment likes by 1; consider a different logic for toggle
+    );
+
+    if (result.modifiedCount === 1) {
+      res.json({ success: true, message: 'Like updated successfully.' });
+    } else {
+      res.status(404).send('Movie not found.');
+    }
+  } catch (error) {
+    console.error('Failed to update like:', error);
+    res.status(500).send('Failed to update like.');
   }
 });
