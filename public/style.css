@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", fantasy;
 }
 
 body {
@@ -10,12 +10,13 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color:rgb(179, 75, 25);
+    background-color:pink;
     text-align:center;
 }
 
 .wrapper {
     width: 550px;
+    align-self: center;
     background-color: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
     backdrop-filter: blur(2px);
@@ -28,6 +29,15 @@ body {
 .wrapper h1 {
     font-size: 36px;
     text-align: center;
+    top: -50px;
+    margin-bottom: 25px;
+}
+
+.wrapper h2{
+    font-size: 36px;
+    background-color: black;
+    color:aquamarine;
+    text-align: center;
     margin-bottom: 25px;
 }
 
@@ -38,6 +48,8 @@ body {
     margin: 50px 1;
 }
 
+
+    
 .userID input {
     width: 100%;
     height: 100%;
@@ -100,16 +112,43 @@ body {
     display: none;
 }
  .head {
-    font-size: 32px;
     text-align: center;
     margin-bottom: 25px;
+
     vertical-align: text-top;
-
-    position: absolute;
+    top: -50px;
     font-size: 36px;
-    color: blueviolet;
+    background-color: black;
+    color: aquamarine;
 }
-
+.logout {
+    position: center;
+    width: 100px;
+    height: 50px;
+    outline: none;
+    border-radius: 40px;
+    position: fixed;
+    top:0;
+    background-color: aquamarine;
+    right:0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin: 2px;
+    width: 250px;
+    height: 45px;
+    background: aquamarine;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin: 2px;
+}
 .display {
     margin-top: 50 px;
     align-self: center;
@@ -120,6 +159,7 @@ body {
 	grid-template-columns: 300px 300px 300px;
 	grid-gap: 30px;
 }
+
 .image {
     opacity: 1;
     display: block;
@@ -141,6 +181,7 @@ body {
     left: 42%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
+    
   }
   .container:hover .image {
     opacity: 0.3;
