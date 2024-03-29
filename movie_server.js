@@ -8,7 +8,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const crypto = require('crypto');
 const path = require('path');
 app.use(bodyParser.json());
-app.use(bodyParser.json());
+
 
 
 // MongoDB URI
@@ -214,10 +214,7 @@ app.post('/login', async (req, res) => {
     console.error('Error logging in', error);
     res.status(500).send('Internal Server Error');
   }
-  } catch (error) {
-    console.error('Error logging in', error);
-    res.status(500).send('Internal Server Error');
-  }
+  
 });
 
 app.listen(8080, () => {
