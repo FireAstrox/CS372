@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <p>Genre: ${movie.genre}</p>
                 <p>URL: <a href="${movie.videoUrl}" target="_blank">${movie.videoUrl}</a></p>
                 <p>Likes: ${movie.likes}</p>
+                ${renderComments(movie.comments)}
                 <button class="delete-button" onclick="deleteMovie('${movie._id}')">Delete</button>
             `;
             movieListDiv.appendChild(movieElement);
@@ -75,4 +76,18 @@ async function deleteMovie(movieId) {
         console.error('Error deleting movie:', error);
         alert('Error deleting movie. Please try again.');
     }
+}
+
+function renderComments(comments = []) {
+    return `
+        <div class="comments">
+            ${comments.map(comment => `
+                <div class="comment">
+                    <strong>${comment.username}:</strong> ${comment.comment}
+                    <br>
+                    <small>${new Date(comment.timestamp).toLocaleString()}</small>
+                </div>
+            `).join('')}
+        </div>
+    `;
 }

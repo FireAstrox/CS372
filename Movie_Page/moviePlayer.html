@@ -47,9 +47,12 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const urlParams = new URLSearchParams(window.location.search);
                 const videoId = urlParams.get('videoId');
-                const movieId = urlParams.get('movieId'); // Assuming you're passing the movie ID as well
-    
-                if (videoId) {
+                const movieId = urlParams.get('movieId');
+                
+                console.log('Video ID:', videoId); // Debugging
+                console.log('Movie ID:', movieId); // Debugging
+
+                if (videoId && movieId) {
                     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
                     document.getElementById('videoPlayer').innerHTML = `<iframe width="720" height="405" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                 } else {
@@ -59,21 +62,22 @@
                 const likeButton = document.getElementById('likeButton');
                 likeButton.addEventListener('click', () => toggleLike(movieId));
             });
-    
+     
             function setupLikeButton(movieId) {
                 const likeButton = document.getElementById('likeButton');
                 likeButton.addEventListener('click', () => toggleLike(movieId));
 }
-            function toggleLike(videoId) {
-                fetch(`/likeMovie/${videoId}`, {
-        
-                // Include body if necessary, e.g., for viewerId
+            function toggleLike(movieId) {
+                fetch(`/likeMovie/${movieId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+            
              })
                 .then(response => {
                      if (!response.ok) {
                          throw new Error('Network response was not ok');
              }
-                     return response.json(); // This line assumes the response is JSON
+                     return response.json();
                 })
                 .then(data => {
                      alert('Like status toggled.');

@@ -144,11 +144,12 @@ app.get('/addMovies', async (req, res) => {
 });
 
 app.post('/addMovie', async (req, res) =>{
-  const { title, genre, videoUrl, likes } = req.body;
+  const { title, genre, videoUrl } = req.body;
+  let { likes } = req.body;
 
   // Convert likes to an integer
   likes = parseInt(likes, 10);
-  if (isNaN(likes)) likes = 0; // Default to 0 if conversion fails
+  if (isNaN(likes)) { likes = 0; } // Default to 0 if conversion fails
   
     try {
       const moviesCollection = await initializeDbConnection('Movies');
@@ -172,7 +173,7 @@ app.get('/movies', async (req, res) => {
   try {
       const moviesCollection = await initializeDbConnection("Movies");
       const movies = await moviesCollection.find().toArray();
-      res.json(movies); // Assuming you are using a template engine like EJS
+      res.json(movies); 
   } catch (error) {
       console.error('Error fetching movies:', error);
       res.status(500).json({ success: false, message: 'Internal server error' });
@@ -289,25 +290,35 @@ app.post('/addComment/:movieId', async (req, res) => {
 
 app.post('/likeMovie/:movieId', async (req, res) => {
   const { movieId } = req.params;
-  // This example assumes each viewer can like the movie once and toggles like status
-  // Adjust according to your application's needs
+  //console.log(movieId)
   if (!ObjectId.isValid(movieId)) {
     return res.status(400).send('Invalid movie ID.');
   }
 
   try {
     const moviesCollection = await initializeDbConnection('Movies');
+    console.log(`Attempting to toggle like for movie ID: ${movieId}`);
     // This is a simplistic approach; you might want to track individual viewer likes in a more complex app
     const result = await moviesCollection.updateOne(
       { _id: new ObjectId(movieId) },
       { $inc: { likes: 1 } } // Increment likes by 1; consider a different logic for toggle
-    );
+      
+      );
+      if (result.matchedCount === 0) {
+      // No document matches the provided ID
+      console.log('No document found with the provided movie ID.');
+      return res.status(404).send('Movie not found.');
+    }
 
     if (result.modifiedCount === 1) {
+      console.log('Like updated successfully.');
       res.json({ success: true, message: 'Like updated successfully.' });
     } else {
-      res.status(404).send('Movie not found.');
+      // Document was found but not updated; this might indicate a logic issue
+      console.log('Document found but not updated.');
+      res.status(500).send('Like update failed.');
     }
+    
   } catch (error) {
     console.error('Failed to update like:', error);
     res.status(500).send('Failed to update like.');
