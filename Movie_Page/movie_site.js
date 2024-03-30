@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('Login');
 
@@ -12,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
             username:username, 
             password:password 
         }
+
+/*********************************************************
+----------------------------------------------------------
+----------------Send Login to server----------------------
+----------------------------------------------------------
+*********************************************************/
 
         $.post('/login', userData, (response) => {
             if (response.success ){
@@ -31,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(response.message);
             }
         })
-    //}
         
         });
     });

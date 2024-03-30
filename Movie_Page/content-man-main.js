@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const addButton = document.getElementById("add");
     addButton.addEventListener("click", () => {
-        window.location.href = '/addMovies';
+        window.location.href = '/content-add';
         console.log("Successful Add detection");
     });
 

@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMovies();
 });
 
+/*********************************************************
+----------------------------------------------------------
+-------Fetch all the current movies from data base--------
+----------------------------------------------------------
+*********************************************************/
 function fetchMovies() {
     fetch('/movies')
         .then(response => {
@@ -32,6 +37,12 @@ function fetchMovies() {
         });
 }
 
+/*********************************************************
+----------------------------------------------------------
+---Dynamically add HTML to show the add comments fields---
+----------------------------------------------------------
+*********************************************************/
+
 function renderCommentsForm(movieId) {
     return `
         <form class="comment-form" data-movie-id="${movieId}">
@@ -40,6 +51,12 @@ function renderCommentsForm(movieId) {
         </form>
     `;
 }
+
+/*********************************************************
+----------------------------------------------------------
+----Render all the current comment data for each movie----
+----------------------------------------------------------
+*********************************************************/
 
 function renderComments(comments = []) {
     return `
@@ -55,6 +72,12 @@ function renderComments(comments = []) {
     `;
 }
 
+/*********************************************************
+----------------------------------------------------------
+-------Format timestamps to be displayed in comments------
+----------------------------------------------------------
+*********************************************************/
+
 function formatTimestamp(timestamp) {
     // Convert the ISO 8601 timestamp to a more readable format
     // Example format: "Oct 1, 2023, 12:00 PM"
@@ -68,6 +91,12 @@ function formatTimestamp(timestamp) {
         minute: '2-digit',
     });
 }
+
+/*********************************************************
+----------------------------------------------------------
+----------Attach Comments to each movie listing-----------
+----------------------------------------------------------
+*********************************************************/
 
 function attachCommentFormEventListeners() {
     document.querySelectorAll('.comment-form').forEach(form => {
