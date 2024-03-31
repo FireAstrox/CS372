@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Content Management</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient( to right, #09090c, #b90101);
+                margin: 0;
+                padding: 20px;
+                color: #333;
+                /* display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh; */
+            }
+    
+            .wrapper {
+                width: 100%;
+                max-width: 800px;
+                margin: auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                text-align: center; /* Center align the text and any inline elements like button */
+            }
+    
+            h1 {
+                color: #333;
+                font-size: 24px;
+                margin-bottom: 20px; /* Additional space between h1 and the button */
+            }
+    
+            .add-button {
+                padding: 0.5rem 1.5rem;
+                background-color: #1c1c1c;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s, transform 0.3s;
+                font-size: 1.1rem;
+                border: none;
+                cursor: pointer;
+            }
+            
+            .add-button:hover, .add-button:focus {
+                background-color: #2c2c2c;
+                transform: translateY(-2px);
+                outline: none;
+            }
+
+            .delete-button {
+                padding: 0.5rem 1.5rem;
+                background-color: #1c1c1c;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s, transform 0.3s;
+                font-size: 1.1rem;
+                border: none;
+                cursor: pointer;
+            }
+            
+            .delete-button:hover, .add-button:focus {
+                background-color: #2c2c2c;
+                transform: translateY(-2px);
+                outline: none;
+            }
+    
+    
+            #movieList {
+                margin-top: 20px;
+            }
+    
+            .comments {
+                margin-top: 10px;
+            }
+            .comment {
+                background: #f1d1d1;
+                padding: 10px;
+                margin-bottom: 5px;
+                border-radius: 4px;
+            }
+            
+            .movie-item {
+                background: #e9ecef;
+                margin-bottom: 10px;
+                padding: 10px;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <h1>Movie Library</h1>
+            <button class="add-button" id="add">Add</button>
+            <button class="delete-button" data-movie-id="MOVIE_ID_HERE">Delete</button>
+            <div class="movieList" id="movieList">
+                <!-- Dynamic content should be inserted here -->
+            </div>
+        </div>
+        <script src="content-man-main.js"></script>
+    </body>
+    </html>
+
