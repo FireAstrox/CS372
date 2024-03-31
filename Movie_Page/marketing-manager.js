@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Wait for the DOM to fully load before fetching movies
     fetchMovies();
 });
 
@@ -7,19 +8,26 @@ document.addEventListener('DOMContentLoaded', () => {
 -------Fetch all the current movies from data base--------
 ----------------------------------------------------------
 *********************************************************/
+
 function fetchMovies() {
+    // Fetch movies from the '/movies' endpoint
     fetch('/movies')
-        .then(response => {
+       .then(response => {
+            // Throw an error if the response is not OK
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            // Convert the response to JSON
             return response.json();
         })
-        .then(movies => {
+       .then(movies => {
+            // Throw an error if the response is not an array
             if (!Array.isArray(movies)) {
                 throw new Error('Expected an array of movies');
             }
+            // Get the movieListDiv element
             const movieListDiv = document.getElementById('movieList');
+            // Update the movieListDiv's innerHTML with the mapped movies
             movieListDiv.innerHTML = movies.map(movie => `
                 <div class="movie-item">
                     <h3>${movie.title}</h3>
@@ -29,9 +37,11 @@ function fetchMovies() {
                     ${renderComments(movie.comments)}
                 </div>
             `).join('');
+            // Attach event listeners to the comment forms
             attachCommentFormEventListeners();
         })
-        .catch(error => {
+       .catch(error => {
+            // Log the error in the console and update the movieListDiv's innerHTML with an error message
             console.error('Error fetching movies:', error);
             document.getElementById('movieList').innerHTML = '<p>Error loading movies.</p>';
         });
@@ -44,6 +54,7 @@ function fetchMovies() {
 *********************************************************/
 
 function renderCommentsForm(movieId) {
+    // Return the HTML for the comment form
     return `
         <form class="comment-form" data-movie-id="${movieId}">
             <input type="text" name="comment" placeholder="Leave a comment" required>
@@ -59,6 +70,7 @@ function renderCommentsForm(movieId) {
 *********************************************************/
 
 function renderComments(comments = []) {
+    // Return the HTML for the comments
     return `
         <div class="comments">
             ${comments.map(comment => `
@@ -80,8 +92,6 @@ function renderComments(comments = []) {
 
 function formatTimestamp(timestamp) {
     // Convert the ISO 8601 timestamp to a more readable format
-    // Example format: "Oct 1, 2023, 12:00 PM"
-    // This can be adjusted based on your preference and locale
     const date = new Date(timestamp);
     return date.toLocaleString('en-US', {
         month: 'short',
@@ -99,19 +109,20 @@ function formatTimestamp(timestamp) {
 *********************************************************/
 
 function attachCommentFormEventListeners() {
+    // Attach submit event listeners to all comment forms
     document.querySelectorAll('.comment-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const movieId = this.getAttribute('data-movie-id');
             const comment = this.comment.value;
-            
+
             fetch(`/addComment/${movieId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: 'MarketingManager', comment })
             })
-            .then(response => response.json())
-            .then(data => {
+           .then(response => response.json())
+           .then(data => {
                 if (data.success) {
                     alert('Comment added successfully.');
                     fetchMovies(); // Refresh the list to show the new comment
@@ -119,7 +130,7 @@ function attachCommentFormEventListeners() {
                     alert('Failed to add comment.');
                 }
             })
-            .catch(error => console.error('Error adding comment:', error));
+           .catch(error => console.error('Error adding comment:', error));
         });
     });
 }
