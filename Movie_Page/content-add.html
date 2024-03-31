@@ -1,9 +1,17 @@
+<!-- HTML page for adding a movie -->
 <html>
     <head>
+        <!-- Sets the character set to UTF-8 and viewport settings -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Page title -->
         <title>Add Movie</title>
+
+        <!-- jQuery script for various functionalities -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- CSS styling for the page -->
         <style>
             /* General Body Styling */
             body.add-movie-body {
@@ -15,9 +23,9 @@
                 height: 100vh;
                 margin: 0;
             }
-    
+
             /* Wrapper Styling */
-            .wrapper {
+           .wrapper {
                 background-color: #ffffff;
                 padding: 20px;
                 border-radius: 8px;
@@ -25,32 +33,32 @@
                 width: 100%;
                 max-width: 400px;
             }
-    
-            .form-header h1 {
+
+           .form-header h1 {
                 color: #333;
                 margin-bottom: 20px;
             }
-    
+
             /* Input Box Styling */
-            .input-box {
+           .input-box {
                 margin-bottom: 15px;
             }
-    
-            .form__input {
+
+           .form__input {
                 width: 100%;
                 padding: 10px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 box-sizing: border-box; /* Ensures padding doesn't affect the overall width */
             }
-    
-            .form__input:focus {
+
+           .form__input:focus {
                 border-color: #007bff;
                 outline: none; /* Removes the default focus outline */
             }
-    
+
             /* Button Styling */
-            .btn {
+           .btn {
                 width: 100%;
                 padding: 10px;
                 background-color: #1c1c1c;
@@ -60,31 +68,45 @@
                 cursor: pointer;
                 font-size: 16px;
             }
-    
-            .btn:hover {
+
+           .btn:hover {
                 background-color: #2c2c2c;
             }
         </style>
     </head>
     <body class="add-movie-body">
+        <!-- The form for adding a movie -->
         <div class="wrapper">
             <form class="form" id="addMovieForm">
                 <header class="form-header">
+                    <!-- Heading for the form -->
                     <h1>Add Movie</h1>
                 </header>
+
+                <!-- Input box for the movie title -->
                 <div class="input-box">
                     <input type="text" class="form__input" id="title" placeholder="Title" required>
                 </div>
+
+                <!-- Input box for the movie genre -->
                 <div class="input-box">
                     <input type="text" class="form__input" id="genre" placeholder="Genre" required>
                 </div>
+
+                <!-- Input box for the movie link -->
                 <div class="input-box">
                     <input type="text" class="form__input" id="link" placeholder="Link" required>
                 </div>
+
+                <!-- Button for submitting the form -->
                 <button type="submit" class="btn">Add Movie</button>
             </form>
         </div>
+
+        <!-- Additional jQuery script -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Script for handling the form submission -->
         <script src="addMovie.js"></script>
     </body>
-    </html>
+</html>

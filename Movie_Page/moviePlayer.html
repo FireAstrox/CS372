@@ -2,6 +2,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Movie Player</title>
+        <!-- CSS styling for the body, videoPlayer, iframe and like-button elements -->
         <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,8 +22,8 @@
                 overflow: hidden;
             }
             iframe {
-                width: 1080px; /* You can adjust this to fit your design */
-                height: 620px; /* Adjust height accordingly */
+                width: 1080px; 
+                height: 620px; 
                 border: none;
             }
             .like-button {
@@ -62,7 +63,13 @@
                 const likeButton = document.getElementById('likeButton');
                 likeButton.addEventListener('click', () => toggleLike(movieId));
             });
-     
+
+/*********************************************************
+----------------------------------------------------------
+---------------Setup for the like button------------------
+----------------------------------------------------------
+*********************************************************/
+
             function setupLikeButton(movieId) {
                 const likeButton = document.getElementById('likeButton');
                 likeButton.addEventListener('click', () => toggleLike(movieId));
@@ -71,7 +78,6 @@
                 fetch(`/likeMovie/${movieId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-            
              })
                 .then(response => {
                      if (!response.ok) {
@@ -81,11 +87,10 @@
                 })
                 .then(data => {
                      alert('Like status toggled.');
-                     // Update UI based on new like status here
+                     
                  })
                  .catch(error => {
                 console.error('Error toggling like:', error);
-                // Handle non-JSON response or network errors
     });
 }
         </script>

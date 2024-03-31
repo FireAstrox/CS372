@@ -10,8 +10,6 @@ const path = require('path');
 app.use(bodyParser.json());
 
 
-
-// MongoDB URI
 const MONGODB_URI = 'mongodb://localhost:27017';
 
 const client = new MongoClient(MONGODB_URI);
@@ -23,17 +21,54 @@ const presetUsers = [
   { username: 'Marketing-Manager', password: 'password', role: 'Marketing-Manager' }
 ];
 
+/*********************************************************
+----------------------------------------------------------
+----------------Make MongoDB Connection-------------------
+----------------------------------------------------------
+*********************************************************/
+
+const dbName = 'Movie_Site';
+async function initializeDbConnection(collectionName) {
+  console.log('Connected to MongoDB'); 
+  try{
+     await client.connect();
+
+    return client.db(dbName).collection(collectionName)
+  }
+  catch (error) {
+    console.error("Error connecting to MongoDB: ", error);
+    throw error;
+  }
+}
+
+initializeDbConnection().catch(console.error);
+
+/*********************************************************
+----------------------------------------------------------
+----------------Find User in Database---------------------
+----------------------------------------------------------
+*********************************************************/
+
+async function findUser(username, collection){
+  try{
+
+    //const usersCollection = db.collection('Users');
+
+    const user = await collection.findOne({ username: username });
+
+    return user;
+  }
+  catch (error) {
+    console.error('Error finding user', error);
+    throw error;
+  }
+}
 
 /*********************************************************
 ----------------------------------------------------------
 ----------------Verify User Password----------------------
 ----------------------------------------------------------
 *********************************************************/
-
-
-
-
-
 
 async function verifyPassword(username, password, collection) {
 
@@ -55,138 +90,23 @@ async function verifyPassword(username, password, collection) {
   }
 }
 
-//helper functions to fix the password hashes
 
-// function correctHashPassword(password) {
-//   if (!hashedPassword) {
-//     throw new Error('Password is undefined, cannot hash.');
-// }
-// const hash = crypto.createHash('sha256');
-// hash.update(hashedPassword);
-// return hash.digest('hex');
-// }
-
-// async function updatePasswordHashes() {
-//   await client.connect();
-//   const db = client.db('Movie_Site');
-//   const usersCollection = db.collection('Users');
-
-//   const users = await usersCollection.find().toArray(); // Gets all users
-
-//   for (const user of users) {
-//     if (typeof user.password === 'undefined') {
-//       console.error(`User ${user.username} has no password defined.`);
-//       continue; // Skip this user and move to the next
-//   }  
-    
-//     const correctHash = correctHashPassword(user.password); // Assume 'user.password' is the original plain text password
-
-//       await usersCollection.updateOne(
-//           { _id: user._id }, // Use the unique identifier for the user document
-//           { $set: { password: correctHash } } // Update the password field with the correct hash
-//       );
-//   }
-
-//   console.log('All passwords updated.');
-//   client.close();
-// }
-
-// updatePasswordHashes().catch(console.error);
 
 /*********************************************************
 ----------------------------------------------------------
-----------------Make MongoDB Connection-------------------
+-------------------Main Login Page------------------------
 ----------------------------------------------------------
 *********************************************************/
-const dbName = 'Movie_Site';
-async function initializeDbConnection(collectionName) {
-  console.log('Connected to MongoDB'); 
-  try{
-     await client.connect();
-
-    return client.db(dbName).collection(collectionName)
-  }
-  catch (error) {
-    console.error("Error connecting to MongoDB: ", error);
-    throw error;
-  }
-}
-
-initializeDbConnection().catch(console.error);
-
-
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/Movie_Page/movie_login.html'));
 });
 
-app.get('/viewer', (req, res) => {
-    res.sendFile(path.join(__dirname, "/Movie_Page/viewer.html"));
-});
-
-app.get('/content-manager', (req, res) => {
-    res.sendFile(path.join(__dirname, "/Movie_Page/content-manager.html"));
-});
-
-app.get('/marketing-manager', (req, res) => {
-    res.sendFile(path.join(__dirname, "/Movie_Page/marketing-manager.html"));
-});
-
-app.get('/addMovies', async (req, res) => {
-  // try {
-  //     const moviesCollection = await connectToMongoDB("Movies");
-  //     const movies = await moviesCollection.find().toArray();
-      res.sendFile(path.join(__dirname, "/Movie_Page/content-add.html"));
-      //res.json(movies);
-  // } catch (error) {
-  //     console.error('Error fetching movies:', error);
-  //     res.status(500).json({ success: false, message: 'Internal server error' });
-  // }
-});
-
-app.post('/addMovie', async (req, res) =>{
-  const { title, genre, videoUrl } = req.body;
-  let { likes } = req.body;
-
-  // Convert likes to an integer
-  likes = parseInt(likes, 10);
-  if (isNaN(likes)) { likes = 0; } // Default to 0 if conversion fails
-  
-    try {
-      const moviesCollection = await initializeDbConnection('Movies');
-      const result = await moviesCollection.insertOne({ title, genre, videoUrl, likes });
-      if (result.acknowledged) {
-        console.log('Movie added successfully'); 
-        res.json({ success: true, message: 'Movie added successfully'});
-      }
-      else {
-        throw new Error('Movie insertion failed');
-      }
-    }
-    catch (error) {
-      console.error('Failed to add movie:, error ')
-      res.status(500).json({ success: false, message: 'Failed to add movie' });
-    }
-});
-
-
-app.get('/movies', async (req, res) => {
-  try {
-      const moviesCollection = await initializeDbConnection("Movies");
-      const movies = await moviesCollection.find().toArray();
-      res.json(movies); 
-  } catch (error) {
-      console.error('Error fetching movies:', error);
-      res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-
-app.get('*', (req, res) => {
-  res.json("page not found");
-});
-
-// Routes
+/*********************************************************
+----------------------------------------------------------
+--------------------Login Function------------------------
+----------------------------------------------------------
+*********************************************************/
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -217,31 +137,99 @@ app.post('/login', async (req, res) => {
   
 });
 
-app.listen(8080, () => {
-    console.log("Server is running on port", 8080);
-});
-
-
 /*********************************************************
 ----------------------------------------------------------
-----------------Find User in Database---------------------
+-----------------Viewer Mainpage Route--------------------
 ----------------------------------------------------------
 *********************************************************/
 
-async function findUser(username, collection){
-  try{
+app.get('/viewer', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie_Page/viewer.html"));
+});
 
-    //const usersCollection = db.collection('Users');
+/*********************************************************
+----------------------------------------------------------
+-----------Content-Manager Mainpage Route-----------------
+----------------------------------------------------------
+*********************************************************/
 
-    const user = await collection.findOne({ username: username });
+app.get('/content-manager', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie_Page/content-manager.html"));
+});
 
-    return user;
+/*********************************************************
+----------------------------------------------------------
+-----------Content-Manager Add Movie Route----------------
+----------------------------------------------------------
+*********************************************************/
+
+app.get('/content-add', async (req, res) => {
+      res.sendFile(path.join(__dirname, "/Movie_Page/content-add.html"));
+});
+
+/*********************************************************
+----------------------------------------------------------
+-----------Marketing-Manager Mainpage Route---------------
+----------------------------------------------------------
+*********************************************************/
+
+app.get('/marketing-manager', (req, res) => {
+    res.sendFile(path.join(__dirname, "/Movie_Page/marketing-manager.html"));
+});
+
+/*********************************************************
+----------------------------------------------------------
+-----------Add Movie into Database function---------------
+----------------------------------------------------------
+*********************************************************/
+
+app.post('/addMovie', async (req, res) =>{
+  const { title, genre, videoUrl } = req.body;
+  let { likes } = req.body;
+
+  // Convert likes to an integer
+  likes = parseInt(likes, 10);
+  if (isNaN(likes)) { likes = 0; } // Default to 0 if conversion fails
+  
+    try {
+      const moviesCollection = await initializeDbConnection('Movies');
+      const result = await moviesCollection.insertOne({ title, genre, videoUrl, likes });
+      if (result.acknowledged) {
+        console.log('Movie added successfully'); 
+        res.json({ success: true, message: 'Movie added successfully'});
+      }
+      else {
+        throw new Error('Movie insertion failed');
+      }
+    }
+    catch (error) {
+      console.error('Failed to add movie:, error ')
+      res.status(500).json({ success: false, message: 'Failed to add movie' });
+    }
+});
+
+/*********************************************************
+----------------------------------------------------------
+------------Get all current Movies function---------------
+----------------------------------------------------------
+*********************************************************/
+
+app.get('/movies', async (req, res) => {
+  try {
+      const moviesCollection = await initializeDbConnection("Movies");
+      const movies = await moviesCollection.find().toArray();
+      res.json(movies); 
+  } catch (error) {
+      console.error('Error fetching movies:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
   }
-  catch (error) {
-    console.error('Error finding user', error);
-    throw error;
-  }
-}
+});
+
+/*********************************************************
+----------------------------------------------------------
+-----------Delete a movie from the database---------------
+----------------------------------------------------------
+*********************************************************/
 
 app.delete('/deleteMovie/:movieId', async (req, res) => {
   const { movieId } = req.params;
@@ -262,6 +250,12 @@ app.delete('/deleteMovie/:movieId', async (req, res) => {
       res.status(500).json({ success: false, message: 'Failed to delete movie' });
   }
 });
+
+/*********************************************************
+----------------------------------------------------------
+--------Add a comment for a movie into database-----------
+----------------------------------------------------------
+*********************************************************/
 
 app.post('/addComment/:movieId', async (req, res) => {
   const { movieId } = req.params;
@@ -289,6 +283,12 @@ app.post('/addComment/:movieId', async (req, res) => {
     res.status(500).send('Failed to add comment.');
   }
 });
+
+/*********************************************************
+----------------------------------------------------------
+--Increment the Like counter for a movie in the Database--
+----------------------------------------------------------
+*********************************************************/
 
 app.post('/likeMovie/:movieId', async (req, res) => {
   const { movieId } = req.params;
@@ -325,4 +325,17 @@ app.post('/likeMovie/:movieId', async (req, res) => {
     console.error('Failed to update like:', error);
     res.status(500).send('Failed to update like.');
   }
+});
+
+/*********************************************************
+----------------------------------------------------------
+----------------------Info block--------------------------
+----------------------------------------------------------
+*********************************************************/
+app.get('*', (req, res) => {
+  res.json("page not found");
+});
+
+app.listen(8080, () => {
+    console.log("Server is running on port", 8080);
 });
