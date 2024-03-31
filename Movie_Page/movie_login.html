@@ -1,118 +1,76 @@
-<!-- HTML document with a login form -->
-
-<html>
-
-<!-- Document head -->
+<html lang="en">
 <head>
-
-	<!-- Character encoding meta tag -->
-	<meta charset="UTF-8">
-
-	<!-- Viewport meta tag for responsive design -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<!-- Document title -->
-	<title>Login</title>
-
-	<!-- External jQuery library script -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-	<!-- Document styling -->
-	<style>
-		
-		/* CSS reset */
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 0;
-		}
-		
-		/* Container styling */
-		.container {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			min-height: 100vh;
-			padding: 20px;
-			background: linear-gradient(to right, #09090c, #b90101);
-		}
-		
-		/* Form styling */
-		.form {
-			width: 100%;
-			max-width: 320px;
-			background: #fff;
-			padding: 20px;
-			border-radius: 5px;
-			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-		}
-		
-		/* Form heading styling */
-		.form h2 {
-			text-align: center;
-			margin-bottom: 20px;
-		}
-		
-		/* Form input styling */
-		.form input {
-			display: block;
-			width: 100%;
-			margin-bottom: 10px;
-			padding: 10px;
-			border-radius: 5px;
-			border: 1px solid #ddd;
-		}
-		
-		/* Form button styling */
-		.form button {
-			display: block;
-			width: 100%;
-			padding: 10px;
-			background: #1c1c1c;
-			color: #fff;
-			border-radius: 5px;
-			border: none;
-			cursor: pointer;
-		}
-		
-		/* Form button hover styling */
-		.form button:hover {
-			background: #2c2c2c;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(to right, rgb(240, 169, 181), rgb(134, 203, 226));
+        }
+        .form {
+            width: 100%;
+            max-width: 320px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #1c1c1c;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .form button:hover {
+            background: #2c2c2c;
+        }
+    </style>
 </head>
-
-<!-- Document body -->
 <body>
+    <div class="container">
+        <h1>FletNix Login Page</h1>
+        <div class="form">
+            <h2>Login</h2>
+            <form id="Login">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required />
 
-	<!-- Container div with form -->
-	<div class="container">
-		
-		<!-- Login form -->
-		<div class="form">
-			
-			<!-- Form header -->
-			<h2>Login</h2>
-			
-			<!-- Login form -->
-			<form id="Login">
-				
-				<!-- Username label and input -->
-				<label for="username">Username</label>
-				<input type="text" id="username" name="username" placeholder="Enter username" required />
-				
-				<!-- Password label and input -->
-				<label for="password">Password</label>
-				<input type="password" id="password" name="password" placeholder="Enter password" required />
-				
-				<!-- Form button -->
-				<button type="submit">Login</button>
-			</form>
-		</div>
-	</div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required />
 
-	<!-- External movie site script -->
-	<script src="movie_site.js"></script>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <script src="movie_site.js"></script>
 </body>
 </html>
