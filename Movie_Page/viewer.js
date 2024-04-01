@@ -18,7 +18,16 @@ function fetchMovies() {
                 movieDiv.className = 'movie-item';
                 movieDiv.innerHTML = `<h2>${movie.title}</h2><p>${movie.genre}</p><p>Likes: ${movie.likes}</p> `;
                 movieDiv.addEventListener('click', () => {
-                    const videoId = new URL(movie.videoUrl).searchParams.get('v');
+                    const url = new URL(movie.videoUrl);
+                    let videoId;
+                    // Check if URL is a shortened YouTube URL
+                    if (url.host === 'youtu.be') {
+                        // Extract video ID from the path
+                        videoId = url.pathname.substring(1);
+                    } else {
+                        // Extract video ID using searchParams for standard YouTube URLs
+                        videoId = url.searchParams.get('v');
+                    }
                     window.location.href = `/moviePlayer.html?videoId=${videoId}&movieId=${movie._id}`;
                     console.log(movie._id);
                 });
