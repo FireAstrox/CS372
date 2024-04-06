@@ -8,6 +8,7 @@ Before you begin, make sure you have the following installed:
 - Node.js
 - MongoDB
   - For MongoDB, we used MongoDB Compass for ease of use, especially on Windows.
+  - [[compass](https://downloads.mongodb.com/compass/mongodb-compass-1.42.3-win32-x64.exe)]
 
 ### 1. Clone the Repository
 git clone [[github repo link](https://github.com/FireAstrox/CS372)]
