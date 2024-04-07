@@ -40,7 +40,7 @@ Verify users with the following usernames and roles:
 
 ### Passwords 
  - Viewer: `password`
- - Content-Manager: `password1`
+ - Content-Manager: `password`
  - Marketing-Manager: `password`
 
 
