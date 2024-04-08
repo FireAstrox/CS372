@@ -4,7 +4,7 @@ CS372 Project Repo
 ## Prerequisites
 
 Before you begin, make sure you have the following installed:
-- Git
+- Git [[Install here](https://git-scm.com/downloads)]
 - Node.js [[Install here](https://nodejs.org/en/download/current)]
 - MongoDB [[Install here](https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-7.0.8-signed.msi)]
   - For MongoDB, MongoDB Compass is required for ease of use.
