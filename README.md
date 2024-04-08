@@ -13,7 +13,7 @@ Before you begin, make sure you have the following installed:
 ## These instructions are written for the use of MongoDB Compass Only
 
 ### 1. Clone the Repository
-git clone https://github.com/FireAstrox/CS372
+Run `git clone https://github.com/FireAstrox/CS372`
 
 ### 2. Setup MongoDB
 
