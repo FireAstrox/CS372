@@ -8,7 +8,7 @@ Before you begin, make sure you have the following installed:
 - Node.js [[Install here](https://nodejs.org/en/download/current)]
 - MongoDB Community Server[[Install here](https://www.mongodb.com/try/download/community)]
   - For MongoDB, MongoDB Compass is required for ease of use.
-  - [[compass](https://downloads.mongodb.com/compass/mongodb-compass-1.42.3-win32-x64.exe)]
+  - [[compass](https://www.mongodb.com/try/download/compass)]
 
 ## These instructions are written for the use of MongoDB Compass Only
 
