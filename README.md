@@ -6,7 +6,7 @@ CS372 Project Repo
 Before you begin, make sure you have the following installed:
 - Git [[Install here](https://git-scm.com/downloads)]
 - Node.js [[Install here](https://nodejs.org/en/download/current)]
-- MongoDB [[Install here](https://www.mongodb.com/try/download/community)]
+- MongoDB Community Server[[Install here](https://www.mongodb.com/try/download/community)]
   - For MongoDB, MongoDB Compass is required for ease of use.
   - [[compass](https://downloads.mongodb.com/compass/mongodb-compass-1.42.3-win32-x64.exe)]
 
