@@ -4,11 +4,12 @@ CS372 Project Repo
 ## Prerequisites
 
 Before you begin, make sure you have the following installed:
-- Git [[Install here](https://git-scm.com/downloads)]
-- Node.js [[Install here](https://nodejs.org/en/download/current)]
-- MongoDB Community Server[[Install here](https://www.mongodb.com/try/download/community)]
-  - For MongoDB, MongoDB Compass is required for ease of use.
-  - [[compass](https://www.mongodb.com/try/download/compass)]
+- Git [Install here](https://git-scm.com/downloads)
+- Node.js [Install here](https://nodejs.org/en/download/current)
+- MongoDB Community Server [Install here](https://www.mongodb.com/try/download/community)
+  - For Ubuntu users follow this [link](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/) for installation instructions 
+  - For MongoDB, MongoDB Compass is required
+  - [Compass](https://www.mongodb.com/try/download/compass)
 
 ## These instructions are written for the use of MongoDB Compass Only
 
@@ -17,7 +18,14 @@ Run `git clone https://github.com/FireAstrox/CS372`
 
 ### 2. Setup MongoDB
 
-- Open MongoDB (We recommend Compass for ease of use on Windows).
+- Open MongoDB Compass
+- For Linux users ensure mongodb is running with
+   
+  `sudo systemctl start mongod` for ubuntu users or
+    
+  `sudo systemctl start mongodb.service` for other linux distros
+    
+  if these commands do not work please refer [here](https://www.mongodb.com/docs/manual/administration/install-on-linux/) for instructions for your specific distro
 - In the URI text box use `mongodb://localhost:27017` and click connect
 - Create a database named `Movie_Site`, you will be asked to create a collection at the same time, only one collection can be made here if you choose to do so, the second must be made seperately. 
 - Within this database, create two collections: `Movies` and `Users`.
