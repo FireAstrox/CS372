@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchMovies();
+// });
+
+// Refetch movies when the page is refocused, e.g., navigating back from the movie player
+window.addEventListener('pageshow', (event) => {
     fetchMovies();
 });
 
@@ -9,7 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
 *********************************************************/
 
 function fetchMovies() {
-    fetch('/movies')
+
+    const movieListDiv = document.getElementById('movieList');
+    movieListDiv.innerHTML = ''; // Clear the movie list before adding new items
+
+    fetch('/movies', {
+        cache: 'no-store'
+    })
         .then(response => response.json())
         .then(movies => {
             const movieListDiv = document.getElementById('movieList');
