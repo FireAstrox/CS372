@@ -48,6 +48,8 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const videoId = urlParams.get('videoId');
                 const movieId = urlParams.get('movieId');
+                const liked = localStorage.getItem(`liked_${movieId}`) === 'true';
+                
                 
                 console.log('Video ID:', videoId); // Debugging
                 console.log('Movie ID:', movieId); // Debugging
@@ -59,35 +61,44 @@
                     document.getElementById('videoPlayer').innerText = 'Error: No video ID provided.';
                 }
     
-                const likeButton = document.getElementById('likeButton');
-                likeButton.addEventListener('click', () => toggleLike(movieId));
+                setupLikeButton(movieId);
             });
      
-            function setupLikeButton(movieId) {
-                const likeButton = document.getElementById('likeButton');
-                likeButton.addEventListener('click', () => toggleLike(movieId));
-}
-            function toggleLike(movieId) {
-                fetch(`/likeMovie/${movieId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-            
-             })
-                .then(response => {
-                     if (!response.ok) {
-                         throw new Error('Network response was not ok');
-             }
-                     return response.json();
-                })
-                .then(data => {
-                     alert('Like status toggled.');
-                     // Update UI based on new like status here
-                 })
-                 .catch(error => {
-                console.error('Error toggling like:', error);
-                // Handle non-JSON response or network errors
-    });
-}
+        function toggleLike(movieId) {
+            const liked = localStorage.getItem(`liked_${movieId}`) === 'true';
+            const method = liked ? 'DELETE' : 'POST'; // Use POST to like, DELETE to unlike
+
+            fetch(`/likeMovie/${movieId}`, {
+              method: method,
+             headers: { 'Content-Type': 'application/json' },
+          })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+          })
+            .then(data => {
+                const newLikedStatus = !liked;
+                localStorage.setItem(`liked_${movieId}`, newLikedStatus);
+                updateLikeButton(newLikedStatus);
+         })
+            .catch(error => {
+             console.error('Error toggling like:', error);
+          });
+        }
+
+        function updateLikeButton(isLiked) {
+            const likeButton = document.getElementById('likeButton');
+            likeButton.textContent = isLiked ? 'Unlike' : 'Like';
+        }
+
+        function setupLikeButton(movieId) {
+            const liked = localStorage.getItem(`liked_${movieId}`) === 'true';
+            updateLikeButton(liked);
+            const likeButton = document.getElementById('likeButton');
+            likeButton.addEventListener('click', () => toggleLike(movieId));
+        }
         </script>
     </body>
 </html>
