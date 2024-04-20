@@ -144,7 +144,7 @@ app.post('/login', async (req, res) => {
 *********************************************************/
 
 app.get('/viewer', (req, res) => {
-    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Cache-Control', 'no-store'); //Make Sure the page is not cached
     res.sendFile(path.join(__dirname, "/Movie_Page/viewer.html"));
 });
 
