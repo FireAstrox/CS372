@@ -76,3 +76,11 @@ Navigate to the cloned repository's directory in a terminal, then run:
 
 Open a web browser and navigate to:  
 `localhost:8080`  
+
+### 6. Valid Link format for Adding movies
+
+Only links in the format of `https://www.youtube.com/watch?v=` or `https://youtu.be/` are allowed to be added into the database.  
+Any other link format will be rejected and not added
+
+Ex: https://www.youtube.com/watch?v=njX2bu-_Vw4&t=8s or
+    https://youtu.be/njX2bu-_Vw4
