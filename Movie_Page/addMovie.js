@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const title = document.getElementById("title").value;
         const genre = document.getElementById("genre").value;
         const videoUrl = document.getElementById("link").value;
+
+        // Validate the YouTube URL
+        if (!isValidYoutubeUrl(videoUrl)) {
+            alert("Please enter a valid YouTube URL.");
+            return;
+        }
         
         // Creating an object containing the movie information
         const movieInfo = {
@@ -42,3 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+/*********************************************************
+----------------------------------------------------------
+--------------------Valid URL Check-----------------------
+----------------------------------------------------------
+*********************************************************/
+
+function isValidYoutubeUrl(url) {
+    const regex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9\-_]{11}/;
+    return regex.test(url);
+}
