@@ -144,6 +144,7 @@ app.post('/login', async (req, res) => {
 *********************************************************/
 
 app.get('/viewer', (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
     res.sendFile(path.join(__dirname, "/Movie_Page/viewer.html"));
 });
 
@@ -286,46 +287,42 @@ app.post('/addComment/:movieId', async (req, res) => {
 
 /*********************************************************
 ----------------------------------------------------------
---Increment the Like counter for a movie in the Database--
+---Change the Like counter for a movie in the Database----
 ----------------------------------------------------------
 *********************************************************/
 
 app.post('/likeMovie/:movieId', async (req, res) => {
-  const { movieId } = req.params;
-  //console.log(movieId)
-  if (!ObjectId.isValid(movieId)) {
-    return res.status(400).send('Invalid movie ID.');
-  }
-
-  try {
-    const moviesCollection = await initializeDbConnection('Movies');
-    console.log(`Attempting to toggle like for movie ID: ${movieId}`);
-    // This is a simplistic approach; you might want to track individual viewer likes in a more complex app
-    const result = await moviesCollection.updateOne(
-      { _id: new ObjectId(movieId) },
-      { $inc: { likes: 1 } } // Increment likes by 1; consider a different logic for toggle
-      
-      );
-      if (result.matchedCount === 0) {
-      // No document matches the provided ID
-      console.log('No document found with the provided movie ID.');
-      return res.status(404).send('Movie not found.');
-    }
-
-    if (result.modifiedCount === 1) {
-      console.log('Like updated successfully.');
-      res.json({ success: true, message: 'Like updated successfully.' });
-    } else {
-      // Document was found but not updated; this might indicate a logic issue
-      console.log('Document found but not updated.');
-      res.status(500).send('Like update failed.');
-    }
-    
-  } catch (error) {
-    console.error('Failed to update like:', error);
-    res.status(500).send('Failed to update like.');
-  }
+  toggleLike(req, res, 1); // Increment likes
 });
+
+app.delete('/likeMovie/:movieId', async (req, res) => {
+  toggleLike(req, res, -1); // Decrement likes
+});
+
+async function toggleLike(req, res, increment) {
+  const { movieId } = req.params;
+  if (!ObjectId.isValid(movieId)) {
+      return res.status(400).send('Invalid movie ID.');
+  }
+  
+  try {
+      const moviesCollection = await initializeDbConnection('Movies');
+      const result = await moviesCollection.updateOne(
+          { _id: new ObjectId(movieId) },
+          { $inc: { likes: increment } }
+      );
+      
+      if (result.modifiedCount === 1) {
+          res.json({ success: true, message: 'Like updated successfully.' });
+          console.log (`Successfully updated likes for ${movieId}`)
+      } else {
+          res.status(404).send('Movie not found.');
+      }
+  } catch (error) {
+      console.error('Failed to update like:', error);
+      res.status(500).send('Failed to update like.');
+  }
+}
 
 /*********************************************************
 ----------------------------------------------------------
